@@ -1,0 +1,10 @@
+[user]
+    name = nikita55612
+    email = groz.yt56@gmail.com
+
+[init]
+    defaultBranch = main
+
+[alias]
+    acp = "!f() { git add -A && git commit -m \"$@\" && git push; }; f"
+
