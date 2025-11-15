@@ -36,11 +36,17 @@ vim.keymap.set("n", "<leader>p", '"+p')
 vim.keymap.set("n", "<leader>P", '"+P')
 vim.keymap.set("n", "<leader>q", ":quit<CR>")
 vim.keymap.set("n", "<leader>w", ":write<CR>")
-vim.keymap.set("n", "<leader>e", ":e.<CR>")
-vim.keymap.set("n", "<leader>r", ":e#<CR>")
+vim.keymap.set("n", "<leader>e", ":edit .<CR>")
+vim.keymap.set("n", "<leader>r", ":edit #<CR>")
 vim.keymap.set("n", "n", "nzzzv", { desc = "Next search result (centered)" })
 vim.keymap.set("n", "N", "Nzzzv", { desc = "Previous search result (centered)" })
 vim.keymap.set("n", "<leader>f", vim.lsp.buf.format, { desc = "Format entire buffer" })
+vim.api.nvim_create_autocmd("TermOpen", {
+    pattern = "*",
+    callback = function()
+        vim.keymap.set("t", "qq", "<C-\\><C-n>", { buffer = true })
+    end,
+})
 
 local themes = {
     vague = function(opt)
