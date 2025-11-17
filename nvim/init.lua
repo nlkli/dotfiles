@@ -118,7 +118,7 @@ function SetMyTheme()
     hi("Visual", { bg = c.visual })
     hi("Cursor", { fg = c.void, bg = c.cursor })
     hi("LineNr", { fg = c.fg3 })
-    hi("CursorLine", { bg = c.bg1 })
+    hi("CursorLine", { bg = c.bg2 })
     hi("CursorLineNr", { fg = c.fg1, bg = c.bg1, bold = true })
     hi("TermCursor", { fg = c.cursor })
     hi("Search", { bg = c.bg2, fg = c.fg, bold = true })
@@ -250,8 +250,6 @@ function SetMyTheme()
     hi("@number", { fg = c.const, bold = true })
     hi("@boolean", { link = "Boolean" })
     hi("@operator", { fg = c.fg })
-
-    hi("@markup.underline", { underline = true })
 end
 
 SetMyTheme()
@@ -342,10 +340,14 @@ if #lspservers_ensure_installed > 0 then
     })
 
     require("blink.cmp").setup({
+        debug = true,
         keymap = {
             preset = "default",
             ["<C-space>"] = {},
             ["<C-s>"] = { "show", "show_documentation", "hide_documentation" },
+        },
+        sources = {
+            default = { 'lsp', 'path', 'snippets', 'buffer' },
         },
         signature = { enabled = true },
         completion = {
