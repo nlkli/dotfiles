@@ -38,7 +38,8 @@ vim.keymap.set("n", "<leader>p", '"+p')
 vim.keymap.set("n", "<leader>P", '"+P')
 vim.keymap.set("n", "<leader>q", ":quit<CR>")
 vim.keymap.set("n", "<leader>w", ":write<CR>")
-vim.keymap.set("n", "<leader>e", ":edit .<CR>")
+vim.keymap.set("n", "<leader>E", ":edit .<CR>")
+vim.keymap.set("n", "<leader>e", ":edit %:h<CR>")
 vim.keymap.set("n", "<leader>r", ":edit #<CR>")
 vim.keymap.set("n", "<leader>t", ":tabnew | terminal<CR>")
 vim.keymap.set("n", "n", "nzzzv", { desc = "Next search result (centered)" })
@@ -71,12 +72,20 @@ local themes = {
         vim.pack.add({ "https://github.com/thesimonho/kanagawa-paper.nvim" })
         require("kanagawa-paper").setup(opt)
         vim.cmd("colorscheme kanagawa-paper")
+    end,
+    vim_boring = function(opt)
+        vim.pack.add({ "https://github.com/t184256/vim-boring" })
+        require("vim-boring").setup(opt)
+        vim.cmd("colorscheme vim-boring")
     end
 }
 
--- themes.ashki({ soft = 1 })
+themes.ashki({ soft = 0 })
+
 -- themes.vague()
-themes.kanagawa_paper()
+-- themes.kanagawa_paper()
+-- themes.vim_boring()
+-- vim.cmd("colorscheme darkblue");
 
 local treesitter_ensure_installed = {
     "c",
@@ -98,7 +107,7 @@ local treesitter_ensure_installed = {
 local lspservers_ensure_installed = {
     "lua_ls",
     "html",
-    "eslint",
+    "vtsls",
     "pyright",
     "rust_analyzer",
     "gopls",
