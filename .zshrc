@@ -1,3 +1,4 @@
+export PATH="$HOME/bin:$PATH"
 export EDITOR=nvim
 alias e='$EDITOR'
 alias y='yazi'
