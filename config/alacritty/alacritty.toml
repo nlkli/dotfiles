@@ -1,0 +1,65 @@
+[colors.primary]
+background = "#101010"
+foreground = "#ffffff"
+dim_foreground = "#b0b0b0"
+bright_foreground = "#d0d0d0"
+
+[colors.cursor]
+text = "#101010"
+cursor = "#b0b0b0"
+
+[colors.selection]
+text = "#ffffff"
+background = "#1f1f1f"
+
+[colors.normal]
+black = "#101010"
+red = "#f5a191"
+green = "#90b99f"
+yellow = "#e6b99d"
+blue = "#aca1cf"
+magenta = "#e29eca"
+cyan = "#ea83a5"
+white = "#a0a0a0"
+
+[colors.bright]
+black = "#7e7e7e"
+red = "#ff8080"
+green = "#99ffe4"
+yellow = "#ffc799"
+blue = "#b9aeda"
+magenta = "#ecaad6"
+cyan = "#f591b2"
+white = "#ffffff"
+
+[colors.dim]
+black = "#0c0c0c"
+red = "#c18478"
+green = "#6f8f7b"
+yellow = "#b89476"
+blue = "#857da3"
+magenta = "#b97fa7"
+cyan = "#b5667f"
+white = "#6f6f6f"
+
+[[colors.indexed_colors]]
+index = 16
+color = "#e6b99d"
+
+[[colors.indexed_colors]]
+index = 17
+color = "#e29eca"
+
+[font.normal]
+family = "ProggyClean Nerd Font Mono"
+
+[cursor.style]
+shape = "Block"
+
+[window]
+dynamic_padding = true
+title = "Terminal"
+
+[window.padding]
+x = 8
+y = 8
