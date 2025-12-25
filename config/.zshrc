@@ -72,6 +72,7 @@ bindkey -M vicmd ' p' vi-put-clipboard-after
 bindkey -M vicmd ' P' vi-put-clipboard-before
 bindkey -M vicmd '^y' vi-put-clipboard-before
 bindkey '^y' copy-prompt-line-to-clipboard
+bindkey -M viins '^?' backward-delete-char
 
 function zle-keymap-select {
   if [[ $KEYMAP == vicmd ]]; then

@@ -231,34 +231,34 @@ local function themeSyncExe()
     if vim.fn.has("syntax_on") then vim.cmd("syntax reset") end
 
     local P = {
-        black   = { base = "#101010",   bright = "#7e7e7e",   dim = "#0c0c0c" },
-        red     = { base = "#f5a191",     bright = "#ff8080",     dim = "#c18478" },
-        green   = { base = "#90b99f",   bright = "#99ffe4",   dim = "#6f8f7b" },
-        yellow  = { base = "#e6b99d",  bright = "#ffc799",  dim = "#b89476" },
-        blue    = { base = "#aca1cf",    bright = "#b9aeda",    dim = "#857da3" },
-        magenta = { base = "#e29eca", bright = "#ecaad6", dim = "#b97fa7" },
-        cyan    = { base = "#ea83a5",    bright = "#f591b2",    dim = "#b5667f" },
-        white   = { base = "#a0a0a0",   bright = "#ffffff",   dim = "#6f6f6f" },
-        orange  = { base = "#e6b99d",  bright = "#ffc799",  dim = "#b89476" },
-        pink    = { base = "#e29eca",    bright = "#ecaad6",    dim = "#b97fa7" },
-        comment = "#6f6f6f",
-        status_line = "#0c0c0c",
-        bg0     = "#0c0c0c", -- Dark bg (status line and float)
-        bg1     = "#101010", -- Default bg
-        bg2     = "#141414", -- Lighter bg (colorcolm folds)
-        bg3     = "#181818", -- Lighter bg (cursor line)
-        bg4     = "#2a2a2a", -- Conceal, border fg
-        fg0     = "#d0d0d0", -- Lighter fg
-        fg1     = "#ffffff", -- Default fg
-        fg2     = "#b0b0b0", -- Darker fg (status line)
-        fg3     = "#6f6f6f", -- Darker fg (line numbers, fold colums)
-        sel0    = "#1f1f1f", -- Popup bg, visual selection bg
-        sel1    = "#2a2a2a", -- Popup sel bg, search bg
+        black   = { base = "#f3f4f5",   bright = "#9aa0a6",   dim = "#d0d3d6" },
+        red     = { base = "#b57e6b",     bright = "#c7ae95",     dim = "#c0a38c" },
+        green   = { base = "#6bb57e",   bright = "#95c7ae",   dim = "#8cc0a3" },
+        yellow  = { base = "#b5b76b",  bright = "#aec795",  dim = "#bcc08c" },
+        blue    = { base = "#b56bb5",    bright = "#ae95c7",    dim = "#c08cc0" },
+        magenta = { base = "#b56b8c", bright = "#c795ae", dim = "#c08cac" },
+        cyan    = { base = "#6bb5b5",    bright = "#95aec7",    dim = "#8cc0c0" },
+        white   = { base = "#565e65",   bright = "#f3f4f5",   dim = "#a0a8b0" },
+        orange  = { base = "#d7943e",  bright = "#e0af68",  dim = "#d7aa6f" },
+        pink    = { base = "#d86b91",    bright = "#d3869b",    dim = "#d78ca7" },
+        comment = "#7a828b",
+        status_line = "#CFD9E2",
+        bg0     = "#CFD9E2", -- Dark bg (status line and float)
+        bg1     = "#f3f4f5", -- Default bg
+        bg2     = "#e1e3e5", -- Lighter bg (colorcolm folds)
+        bg3     = "#d6d8da", -- Lighter bg (cursor line)
+        bg4     = "#c0c3c6", -- Conceal, border fg
+        fg0     = "#49525B", -- Lighter fg
+        fg1     = "#565e65", -- Default fg
+        fg2     = "#3e454c", -- Darker fg (status line)
+        fg3     = "#747c84", -- Darker fg (line numbers, fold colums)
+        sel0    = "#d6d8da", -- Popup bg, visual selection bg
+        sel1    = "#aec795", -- Popup sel bg, search bg
         diff = {
-            add = "#2a322d",
-            delete = "#3e2d2a",
-            change = "#2f2d36",
-            text = "#51333d",
+            add = "#d8e7dd",
+            delete = "#e7dcd9",
+            change = "#e7d9e8",
+            text = "#cae1e2",
         }
     }
 
@@ -280,25 +280,25 @@ local function themeSyncExe()
     local syn = {
         bracket     = P.fg2,           -- Brackets and Punctuation
         builtin0    = P.red.base,      -- Builtin variable
-        builtin1    = P.cyan.bright,    -- Builtin type
-        builtin2    = P.orange.bright,  -- Builtin const
-        builtin3    = P.red.bright,     -- Not used
+        builtin1    = P.cyan.dim,    -- Builtin type
+        builtin2    = P.orange.dim,  -- Builtin const
+        builtin3    = P.red.dim,     -- Not used
         comment     = P.comment,       -- Comment
-        conditional = P.magenta.bright, -- Conditional and loop
-        const       = P.orange.bright,  -- Constants, imports and booleans
+        conditional = P.magenta.dim, -- Conditional and loop
+        const       = P.orange.dim,  -- Constants, imports and booleans
         dep         = P.fg3,           -- Deprecated
         field       = P.blue.base,     -- Field
-        func        = P.blue.bright,    -- Functions and Titles
+        func        = P.blue.dim,    -- Functions and Titles
         ident       = P.cyan.base,     -- Identifiers
         keyword     = P.magenta.base,  -- Keywords
         number      = P.orange.base,   -- Numbers
         operator    = P.fg2,           -- Operators
-        preproc     = P.pink.bright,    -- PreProc
-        regex       = P.yellow.bright,  -- Regex
+        preproc     = P.pink.dim,    -- PreProc
+        regex       = P.yellow.dim,  -- Regex
         statement   = P.magenta.base,  -- Statements
         string      = P.green.base,    -- Strings
         type        = P.yellow.base,   -- Types
-        variable    = "#ffffff",    -- Variables
+        variable    = "#565e65",    -- Variables
     }
     local trans = false
     local inactive = false
