@@ -84,3 +84,7 @@ function zle-keymap-select {
 }
 
 zle -N zle-keymap-select
+
+imgview() {
+  ffplay -loglevel quiet -noborder -infbuf "$@"
+}

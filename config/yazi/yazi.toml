@@ -14,7 +14,7 @@ extract = [
 	{ run = 'ya pub extract --list "$@"', desc = "Extract here", for = "unix" },
 ]
 image = [
-    { run = 'ffplay -noborder -infbuf "$@"', desc = "Open image", for = "unix" }
+    { run = 'ffplay -loglevel quiet -noborder -infbuf "$@"', desc = "Open image", for = "unix" }
 ]
 [open]
 rules = [
