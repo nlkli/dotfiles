@@ -7,6 +7,8 @@ sync_dir() {
     local name="$1"
     local src="$2"
     local dst="$3"
+
+    mkdir -p $dst
     
     if ! diff -rq "$src" "$dst" >/dev/null; then
         cp -rf "$src/." "$dst"
