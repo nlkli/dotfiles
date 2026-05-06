@@ -2,9 +2,6 @@ syntax on
 filetype plugin indent on
 set number
 set relativenumber
-set termguicolors
-set background=dark
-colorscheme lunaperche
 set hidden
 set noswapfile
 set encoding=utf-8
@@ -49,6 +46,7 @@ xnoremap <leader>s y:%s/<C-r>"//g<Left><Left>
 nnoremap <leader>u :source ~/.vimrc<CR>
 nnoremap <leader>o :copen<CR>
 nnoremap <leader>c :cclose<CR>
-nnoremap <leader>t :tabnew | terminal<CR>
+nnoremap <leader>t :tabnew | edit .<CR>
+nnoremap <leader>T :tabnew | terminal<CR>
 nnoremap n nzzzv
 nnoremap N Nzzzv

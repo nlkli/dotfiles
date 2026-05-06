@@ -1,13 +1,15 @@
-export PATH="$HOME/bin:$PATH"
+export PATH=$HOME/bin:/usr/local/bin:$PATH
 export EDITOR=nvim
 alias e='$EDITOR'
 alias y='yazi'
+alias c='clear'
+alias q='exit'
 
 bindkey -v
 
 KEYTIMEOUT=1
 
-HISTFILE=$HOME/.zsh_history
+HISTFILE=~/.zsh_history
 HISTSIZE=10000
 SAVEHIST=10000
 
