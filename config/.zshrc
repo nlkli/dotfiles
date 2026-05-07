@@ -5,6 +5,8 @@ alias y='yazi'
 alias c='clear'
 alias q='exit'
 
+export PS1='%n@%m:%~$ '
+
 bindkey -v
 
 KEYTIMEOUT=1

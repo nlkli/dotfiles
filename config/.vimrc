@@ -4,9 +4,7 @@ set number
 set relativenumber
 set hidden
 set noswapfile
-set encoding=utf-8
 set autoread
-set undodir=~/.vim/undodir
 set undofile
 set expandtab
 set shiftwidth=4
@@ -26,6 +24,7 @@ set wildmenu
 set updatetime=300
 set timeoutlen=500
 set belloff=all
+set undodir=~/.vim/undodir
 let g:netrw_banner = 0
 let g:netrw_liststyle = 1
 
@@ -46,6 +45,7 @@ xnoremap <leader>s y:%s/<C-r>"//g<Left><Left>
 nnoremap <leader>u :source ~/.vimrc<CR>
 nnoremap <leader>o :copen<CR>
 nnoremap <leader>c :cclose<CR>
+" nnoremap <leader>t :tabnew<CR>
 nnoremap <leader>t :tabnew | edit .<CR>
 nnoremap <leader>T :tabnew | terminal<CR>
 nnoremap n nzzzv
