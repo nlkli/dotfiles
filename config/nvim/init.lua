@@ -1,33 +1,76 @@
-vim.opt.number = true
-vim.opt.relativenumber = true
-vim.opt.termguicolors = true
-vim.opt.hidden = true
-vim.opt.swapfile = false
-vim.opt.autoread = true
-vim.opt.expandtab = true
-vim.opt.shiftwidth = 4
-vim.opt.softtabstop = 4
-vim.opt.tabstop = 4
-vim.opt.smartindent = true
-vim.opt.ignorecase = true
-vim.opt.smartcase = true
-vim.opt.incsearch = true
-vim.opt.hlsearch = false
-vim.opt.wrap = true
-vim.opt.linebreak = true
-vim.opt.scrolloff = 4
-vim.opt.sidescrolloff = 4
-vim.opt.mouse = "a"
-vim.opt.wildmenu = true
-vim.opt.updatetime = 300
-vim.opt.timeoutlen = 500
-vim.opt.belloff = "all"
-vim.opt.winborder = "rounded"
+local opt = vim.opt
+
+opt.number = true         -- Line numbers
+opt.relativenumber = true -- Relative line numbers
+opt.cursorline = false    -- Highlight current line
+opt.wrap = true           -- Wrap lines
+opt.scrolloff = 4         -- Keep _ lines above/below cursor
+opt.sidescrolloff = 4     -- Keep _ columns left/right of cursor
+
+opt.termguicolors = true
+opt.winborder = "rounded"
+opt.showmatch = true                          -- Highlight matching brackets
+opt.matchtime = 2                             -- How long to show matching bracket
+opt.guicursor = "i:block"                     -- Use block cursor in insert mode
+
+opt.tabstop = 4                               -- Tab width
+opt.shiftwidth = 4                            -- Indent width
+opt.softtabstop = 4                           -- Soft tab stop
+opt.expandtab = true                          -- Use spaces instead of tabs
+opt.smartindent = true                        -- Smart auto-indenting
+opt.autoindent = true                         -- Copy indent from current line
+
+opt.ignorecase = true                         -- Case insensitive search
+opt.smartcase = true                          -- Case sensitive if uppercase in search
+opt.hlsearch = false                          -- Don't highlight search results
+opt.incsearch = true                          -- Show matches as you type
+
+opt.hidden = true                             -- Allow hidden buffers
+opt.backspace = "indent,eol,start" -- Better backspace behavior
+opt.errorbells = false                        -- No error bells
+opt.belloff = "all"
+opt.mouse = "a"                               -- Enable mouse support
+opt.modifiable = true                         -- Allow buffer modifications
+opt.encoding = "UTF-8"                        -- Set encoding
+
+opt.backup = false                            -- Don't create backup files
+opt.writebackup = false                       -- Don't create backup before writing
+opt.swapfile = false                          -- Don't create swap files
+opt.undofile = true                           -- Persistent undo
+opt.undolevels = 10000
+opt.undodir = vim.fn.expand("~/.vim/undodir") -- Undo directory
+
+opt.updatetime = 300                          -- Faster completion
+opt.timeoutlen = 500                          -- Lower than default (1000) to quickly trigger which-key
+opt.ttimeoutlen = 0                           -- Key code timeout
+opt.autoread = true                           -- Auto reload files changed outside vim
+opt.autowrite = true                          -- Auto save
+
+opt.synmaxcol = 300                           -- Syntax highlighting limit
+opt.redrawtime = 10000
+opt.maxmempattern = 20000
+
+opt.smoothscroll = true
+vim.wo.foldmethod = "expr"
+opt.foldlevel = 99             -- Start with all folds open
+opt.formatoptions = "jcroqlnt" -- tcqj
+opt.grepformat = "%f:%l:%c:%m"
+opt.grepprg = "rg --vimgrep"
+
+-- Command-line completion
+opt.wildmenu = true
+opt.wildmode = "longest:full,full"
+
+-- Create undo directory if it doesn't exist
+local undodir = vim.fn.expand("~/.vim/undodir")
+if vim.fn.isdirectory(undodir) == 0 then
+    vim.fn.mkdir(undodir, "p")
+end
+
+opt.linebreak = true
+
 vim.g.netrw_banner = 0
 vim.g.netrw_liststyle = 1
-vim.opt.guicursor = "n-v-i-c:block-Cursor"
-vim.opt.undofile = true
-vim.opt.undodir = vim.fn.expand("~/.vim/undodir")
 
 -- New UI opt-in
 require('vim._core.ui2').enable()
@@ -39,6 +82,7 @@ vim.opt.langmap =
     "ЙQ,ЦW,УE,КR,ЕT,НY,ГU,ШI,ЩO,ЗP,Х{,Ъ}," ..
     "ФA,ЫS,ВD,АF,ПG,РH,ОJ,ЛK,ДL,Ж\\:,Э\"," ..
     "ЯZ,ЧX,СC,МV,ИB,ТN,ЬM,Ё~"
+vim.opt.langremap = true
 
 vim.g.mapleader = " "
 vim.keymap.set({ "n", "x" }, "<leader>y", '"+y')
@@ -51,16 +95,33 @@ vim.keymap.set("n", "<leader>E", ":edit .<CR>")
 vim.keymap.set("n", "<leader>r", ":edit #<CR>")
 vim.keymap.set("n", "<leader>s", [[:%s/\<<C-r><C-w>\>//g<Left><Left>]])
 vim.keymap.set("x", "<leader>s", [[y:%s/<C-r>"//g<Left><Left>]])
-vim.keymap.set("n", "<leader>u", ":source ~/.config/nvim/init.lua<CR>")
 vim.keymap.set("n", "<leader>o", ":copen<CR>")
 vim.keymap.set("n", "<leader>lo", ":lopen<CR>")
 vim.keymap.set("n", "<leader>c", ":cclose | lclose<CR>")
 vim.keymap.set("n", "<leader>t", ":tabnew | edit .<CR>")
 vim.keymap.set("n", "<leader>T", ":tabnew | terminal<CR>")
-vim.keymap.set("n", "n", "nzzzv")
-vim.keymap.set("n", "N", "Nzzzv")
 vim.keymap.set("n", "<leader>F", vim.lsp.buf.format)
 vim.keymap.set("n", "<leader>O", ":Oil<CR>")
+vim.keymap.set("n", "<leader>R", ":source ~/.config/nvim/init.lua<CR>")
+
+vim.keymap.set({ "n", "x" }, "<leader>н", '"+y')
+vim.keymap.set({ "n", "x" }, "<leader>з", '"+p')
+vim.keymap.set({ "n", "x" }, "<leader>З", '"+P')
+vim.keymap.set("n", "<leader>й", ":x<CR>")
+vim.keymap.set("n", "<leader>ц", ":update<CR>")
+vim.keymap.set("n", "<leader>у", ":edit %:h<CR>")
+vim.keymap.set("n", "<leader>У", ":edit .<CR>")
+vim.keymap.set("n", "<leader>к", ":edit #<CR>")
+vim.keymap.set("n", "<leader>ы", [[:%s/\<<C-r><C-w>\>//g<Left><Left>]])
+vim.keymap.set("x", "<leader>ы", [[y:%s/<C-r>"//g<Left><Left>]])
+vim.keymap.set("n", "<leader>щ", ":copen<CR>")
+vim.keymap.set("n", "<leader>дщ", ":lopen<CR>")
+vim.keymap.set("n", "<leader>с", ":cclose | lclose<CR>")
+vim.keymap.set("n", "<leader>е", ":tabnew | edit .<CR>")
+vim.keymap.set("n", "<leader>Е", ":tabnew | terminal<CR>")
+vim.keymap.set("n", "<leader>а", vim.lsp.buf.format)
+vim.keymap.set("n", "<leader>Щ", ":Oil<CR>")
+vim.keymap.set("n", "<leader>К", ":source ~/.config/nvim/init.lua<CR>")
 
 vim.api.nvim_create_autocmd("TermOpen", {
     pattern = "*",
@@ -97,16 +158,6 @@ if vim.fn.executable("fd") == 1 then
     end, { nargs = "*", complete = "file" })
     vim.keymap.set("n", "<leader>f", ":Fd ")
 end
-
-local themes = {
-    nightfox = function(opt)
-        vim.pack.add({ "https://github.com/EdenEast/nightfox.nvim" })
-        require("nightfox").setup(opt)
-        vim.cmd("colorscheme terafox")
-    end,
-}
-
--- themes.nightfox()
 
 vim.pack.add({ "https://github.com/stevearc/oil.nvim" })
 require("oil").setup({
@@ -206,26 +257,26 @@ local function applyRecol()
     if vim.fn.has("syntax_on") then vim.cmd("syntax reset") end
 
     local P = {
-        black   = { "#26233a", "#26233a", "#201e31" },
-        red     = { "#eb6f92", "#eb6f92", "#c85e7c" },
-        green   = { "#31748f", "#31748f", "#2a637a" },
-        yellow  = { "#f6c177", "#f6c177", "#d1a465" },
-        blue    = { "#9ccfd8", "#9ccfd8", "#85b0b8" },
-        magenta = { "#c4a7e7", "#c4a7e7", "#a78ec4" },
-        cyan    = { "#ebbcba", "#ebbcba", "#c8a09e" },
-        white   = { "#e0def4", "#e0def4", "#bebdcf" },
-        orange  = { "#f19885", "#f19885", "#cc8171" },
-        pink    = { "#e6a7c3", "#e6a7c3", "#c38ea6" },
-        bg = { "#111019", "#191724", "#242133", "#2e2b43", "#423c5f" },
-        fg = { "#eae8ff", "#e0def4", "#aaa9b9", "#797884" },
-        sel = { "#373543", "#494756" },
-        cur = { 
+        black       = { "#26233a", "#26233a", "#201e31" },
+        red         = { "#eb6f92", "#eb6f92", "#c85e7c" },
+        green       = { "#31748f", "#31748f", "#2a637a" },
+        yellow      = { "#f6c177", "#f6c177", "#d1a465" },
+        blue        = { "#9ccfd8", "#9ccfd8", "#85b0b8" },
+        magenta     = { "#c4a7e7", "#c4a7e7", "#a78ec4" },
+        cyan        = { "#ebbcba", "#ebbcba", "#c8a09e" },
+        white       = { "#e0def4", "#e0def4", "#bebdcf" },
+        orange      = { "#f19885", "#f19885", "#cc8171" },
+        pink        = { "#e6a7c3", "#e6a7c3", "#c38ea6" },
+        bg          = { "#111019", "#191724", "#242133", "#2e2b43", "#423c5f" },
+        fg          = { "#eae8ff", "#e0def4", "#aaa9b9", "#797884" },
+        sel         = { "#373543", "#494756" },
+        cur         = {
             bg = "#e0def4",
             fg = "#191724",
         },
-        comment = "#908ea1",
+        comment     = "#908ea1",
         status_line = "#111019",
-        diff = {
+        diff        = {
             add = "#29556c",
             delete = "#a6526e",
             change = "#71929d",
@@ -294,217 +345,217 @@ local function applyRecol()
     }
 
     for group, opts in pairs({
-        ColorColumn  = { bg = P.bg[3] },
-        Conceal      = { fg = P.bg[5] },
-        Cursor       = { fg = P.cur.fg, bg = P.cur.bg },
-        lCursor      = { link = "Cursor" },
-        CursorIM     = { link = "Cursor" },
-        CursorColumn = { link = "CursorLine" },
-        CursorLine   = { bg = P.bg[4] },
-        Directory    = { fg = syn.func },
-        DiffAdd      = { bg = P.diff.add },
-        DiffChange   = { bg = P.diff.change },
-        DiffDelete   = { bg = P.diff.delete },
-        DiffText     = { bg = P.diff.text },
-        EndOfBuffer  = { fg = P.bg[2] },
-        ErrorMsg     = { fg = spec.diag.error },
-        WinSeparator = { fg = P.bg[1] },
-        VertSplit    = { link = "WinSeparator" },
-        Folded       = { fg = P.fg[4], bg = P.bg[3] },
-        FoldColumn   = { fg = P.fg[4] },
-        SignColumn   = { fg = P.fg[4] },
-        SignColumnSB = { link = "SignColumn" },
-        Substitute   = { fg = P.bg[2], bg = spec.diag.error },
-        LineNr       = { fg = P.fg[4] },
-        CursorLineNr = { fg = spec.diag.warn, style = "bold" },
-        MatchParen   = { fg = spec.diag.warn, style = inv.match_paren and "reverse,bold" or "bold" },
-        ModeMsg      = { fg = spec.diag.warn, style = "bold" },
-        MoreMsg      = { fg = spec.diag.info, style = "bold" },
-        NonText      = { fg = P.bg[5] },
-        Normal       = { fg = P.fg[2], bg = trans and "NONE" or P.bg[2] },
-        NormalNC     = { fg = P.fg[2], bg = (inactive and P.bg[1]) or (trans and "NONE") or P.bg[2] },
-        NormalFloat  = { fg = P.fg[2], bg = P.bg[1] },
-        FloatBorder  = { fg = P.fg[4] },
-        Pmenu        = { fg = P.fg[2], bg = P.sel[1] },
-        PmenuSel     = { bg = P.sel[2] },
-        PmenuSbar    = { link = "Pmenu" },
-        PmenuThumb   = { bg = P.sel[2] },
-        Question     = { link = "MoreMsg" },
-        QuickFixLine = { link = "CursorLine" },
-        Search       = inv.search and { style = "reverse" } or { fg = P.fg[2], bg = P.sel[2] },
-        IncSearch    = inv.search and { style = "reverse" } or { fg = P.bg[2], bg = spec.diag.hint },
-        CurSearch    = { link = "IncSearch" },
-        SpecialKey   = { link = "NonText" },
-        SpellBad     = { sp = spec.diag.error, style = "undercurl" },
-        SpellCap     = { sp = spec.diag.warn, style = "undercurl" },
-        SpellLocal   = { sp = spec.diag.info, style = "undercurl" },
-        SpellRare    = { sp = spec.diag.info, style = "undercurl" },
-        StatusLine   = { fg = P.fg[3], bg = P.status_line },
-        StatusLineNC = { fg = P.fg[4], bg = P.status_line },
-        TabLine      = { fg = P.fg[3], bg = P.bg[3] },
-        TabLineFill  = { bg = P.bg[1] },
-        TabLineSel   = { fg = P.bg[2], bg = P.fg[4] },
-        Title        = { fg = syn.func, style = "bold" },
-        Visual       = inv.visual and { style = "reverse" } or { bg = P.sel[1] },
-        VisualNOS    = inv.visual and { style = "reverse" } or { link = "visual" },
-        WarningMsg   = { fg = spec.diag.warn },
-        Whitespace   = { fg = P.bg[4] },
-        WildMenu     = { link = "Pmenu" },
-        WinBar       = { fg = P.fg[4], bg = trans and "NONE" or P.bg[2], style = "bold" },
-        WinBarNC     = { fg = P.fg[4], bg = trans and "NONE" or inactive and P.bg[1] or P.bg[2], style = "bold" },
+        ColorColumn                       = { bg = P.bg[3] },
+        Conceal                           = { fg = P.bg[5] },
+        Cursor                            = { fg = P.cur.fg, bg = P.cur.bg },
+        lCursor                           = { link = "Cursor" },
+        CursorIM                          = { link = "Cursor" },
+        CursorColumn                      = { link = "CursorLine" },
+        CursorLine                        = { bg = P.bg[4] },
+        Directory                         = { fg = syn.func },
+        DiffAdd                           = { bg = P.diff.add },
+        DiffChange                        = { bg = P.diff.change },
+        DiffDelete                        = { bg = P.diff.delete },
+        DiffText                          = { bg = P.diff.text },
+        EndOfBuffer                       = { fg = P.bg[2] },
+        ErrorMsg                          = { fg = spec.diag.error },
+        WinSeparator                      = { fg = P.bg[1] },
+        VertSplit                         = { link = "WinSeparator" },
+        Folded                            = { fg = P.fg[4], bg = P.bg[3] },
+        FoldColumn                        = { fg = P.fg[4] },
+        SignColumn                        = { fg = P.fg[4] },
+        SignColumnSB                      = { link = "SignColumn" },
+        Substitute                        = { fg = P.bg[2], bg = spec.diag.error },
+        LineNr                            = { fg = P.fg[4] },
+        CursorLineNr                      = { fg = spec.diag.warn, style = "bold" },
+        MatchParen                        = { fg = spec.diag.warn, style = inv.match_paren and "reverse,bold" or "bold" },
+        ModeMsg                           = { fg = spec.diag.warn, style = "bold" },
+        MoreMsg                           = { fg = spec.diag.info, style = "bold" },
+        NonText                           = { fg = P.bg[5] },
+        Normal                            = { fg = P.fg[2], bg = trans and "NONE" or P.bg[2] },
+        NormalNC                          = { fg = P.fg[2], bg = (inactive and P.bg[1]) or (trans and "NONE") or P.bg[2] },
+        NormalFloat                       = { fg = P.fg[2], bg = P.bg[1] },
+        FloatBorder                       = { fg = P.fg[4] },
+        Pmenu                             = { fg = P.fg[2], bg = P.sel[1] },
+        PmenuSel                          = { bg = P.sel[2] },
+        PmenuSbar                         = { link = "Pmenu" },
+        PmenuThumb                        = { bg = P.sel[2] },
+        Question                          = { link = "MoreMsg" },
+        QuickFixLine                      = { link = "CursorLine" },
+        Search                            = inv.search and { style = "reverse" } or { fg = P.fg[2], bg = P.sel[2] },
+        IncSearch                         = inv.search and { style = "reverse" } or { fg = P.bg[2], bg = spec.diag.hint },
+        CurSearch                         = { link = "IncSearch" },
+        SpecialKey                        = { link = "NonText" },
+        SpellBad                          = { sp = spec.diag.error, style = "undercurl" },
+        SpellCap                          = { sp = spec.diag.warn, style = "undercurl" },
+        SpellLocal                        = { sp = spec.diag.info, style = "undercurl" },
+        SpellRare                         = { sp = spec.diag.info, style = "undercurl" },
+        StatusLine                        = { fg = P.fg[3], bg = P.status_line },
+        StatusLineNC                      = { fg = P.fg[4], bg = P.status_line },
+        TabLine                           = { fg = P.fg[3], bg = P.bg[3] },
+        TabLineFill                       = { bg = P.bg[1] },
+        TabLineSel                        = { fg = P.bg[2], bg = P.fg[4] },
+        Title                             = { fg = syn.func, style = "bold" },
+        Visual                            = inv.visual and { style = "reverse" } or { bg = P.sel[1] },
+        VisualNOS                         = inv.visual and { style = "reverse" } or { link = "visual" },
+        WarningMsg                        = { fg = spec.diag.warn },
+        Whitespace                        = { fg = P.bg[4] },
+        WildMenu                          = { link = "Pmenu" },
+        WinBar                            = { fg = P.fg[4], bg = trans and "NONE" or P.bg[2], style = "bold" },
+        WinBarNC                          = { fg = P.fg[4], bg = trans and "NONE" or inactive and P.bg[1] or P.bg[2], style = "bold" },
 
-        Comment        = { fg = syn.comment, style = stl.comments },
-        Constant       = { fg = syn.const, style = stl.constants },
-        String         = { fg = syn.string, style = stl.strings },
-        Character      = { link = "String" },
-        Number         = { fg = syn.number, style = stl.numbers },
-        Float          = { link = "Number" },
-        Boolean        = { link = "Number" },
-        Identifier     = { fg = syn.ident, style = stl.variables },
-        Function       = { fg = syn.func, style = stl.functions },
-        Statement      = { fg = syn.keyword, style = stl.keywords },
-        Conditional    = { fg = syn.conditional, style = stl.conditionals },
-        Repeat         = { link = "Conditional" },
-        Label          = { link = "Conditional" },
-        Operator       = { fg = syn.operator, style = stl.operators },
-        Keyword        = { fg = syn.keyword, style = stl.keywords },
-        Exception      = { link = "Keyword" },
-        PreProc        = { fg = syn.preproc, style = stl.preprocs },
-        Include        = { link = "PreProc" },
-        Define         = { link = "PreProc" },
-        Macro          = { link = "PreProc" },
-        PreCondit      = { link = "PreProc" },
-        Type           = { fg = syn.type, style = stl.types },
-        StorageClass   = { link = "Type" },
-        Structure      = { link = "Type" },
-        Typedef        = { link = "Type" },
-        Special        = { fg = syn.func },
-        SpecialChar    = { link = "Special" },
-        Tag            = { link = "Special" },
-        Delimiter      = { link = "Special" },
-        SpecialComment = { link = "Special" },
-        Debug          = { link = "Special" },
-        Underlined     = { style = "underline" },
-        Bold           = { style = "bold" },
-        Italic         = { style = "italic" },
-        Error          = { fg = spec.diag.error },
-        Todo           = { fg = P.bg[2], bg = spec.diag.info },
-        qfLineNr       = { link = "lineNr" },
-        qfFileName     = { link = "Directory" },
-        diffAdded      = { fg = spec.git.add },
-        diffRemoved    = { fg = spec.git.removed },
-        diffChanged    = { fg = spec.git.changed },
-        diffOldFile    = { fg = spec.diag.warn },
-        diffNewFile    = { fg = spec.diag.hint },
-        diffFile       = { fg = spec.diag.info },
-        diffLine       = { fg = syn.builtin2 },
-        diffIndexLine  = { fg = syn.preproc },
+        Comment                           = { fg = syn.comment, style = stl.comments },
+        Constant                          = { fg = syn.const, style = stl.constants },
+        String                            = { fg = syn.string, style = stl.strings },
+        Character                         = { link = "String" },
+        Number                            = { fg = syn.number, style = stl.numbers },
+        Float                             = { link = "Number" },
+        Boolean                           = { link = "Number" },
+        Identifier                        = { fg = syn.ident, style = stl.variables },
+        Function                          = { fg = syn.func, style = stl.functions },
+        Statement                         = { fg = syn.keyword, style = stl.keywords },
+        Conditional                       = { fg = syn.conditional, style = stl.conditionals },
+        Repeat                            = { link = "Conditional" },
+        Label                             = { link = "Conditional" },
+        Operator                          = { fg = syn.operator, style = stl.operators },
+        Keyword                           = { fg = syn.keyword, style = stl.keywords },
+        Exception                         = { link = "Keyword" },
+        PreProc                           = { fg = syn.preproc, style = stl.preprocs },
+        Include                           = { link = "PreProc" },
+        Define                            = { link = "PreProc" },
+        Macro                             = { link = "PreProc" },
+        PreCondit                         = { link = "PreProc" },
+        Type                              = { fg = syn.type, style = stl.types },
+        StorageClass                      = { link = "Type" },
+        Structure                         = { link = "Type" },
+        Typedef                           = { link = "Type" },
+        Special                           = { fg = syn.func },
+        SpecialChar                       = { link = "Special" },
+        Tag                               = { link = "Special" },
+        Delimiter                         = { link = "Special" },
+        SpecialComment                    = { link = "Special" },
+        Debug                             = { link = "Special" },
+        Underlined                        = { style = "underline" },
+        Bold                              = { style = "bold" },
+        Italic                            = { style = "italic" },
+        Error                             = { fg = spec.diag.error },
+        Todo                              = { fg = P.bg[2], bg = spec.diag.info },
+        qfLineNr                          = { link = "lineNr" },
+        qfFileName                        = { link = "Directory" },
+        diffAdded                         = { fg = spec.git.add },
+        diffRemoved                       = { fg = spec.git.removed },
+        diffChanged                       = { fg = spec.git.changed },
+        diffOldFile                       = { fg = spec.diag.warn },
+        diffNewFile                       = { fg = spec.diag.hint },
+        diffFile                          = { fg = spec.diag.info },
+        diffLine                          = { fg = syn.builtin2 },
+        diffIndexLine                     = { fg = syn.preproc },
 
-        DiagnosticError          = { fg = spec.diag.error },
-        DiagnosticWarn           = { fg = spec.diag.warn },
-        DiagnosticInfo           = { fg = spec.diag.info },
-        DiagnosticHint           = { fg = spec.diag.hint },
-        DiagnosticOk             = { fg = spec.diag.ok },
-        DiagnosticSignError      = { link = "DiagnosticError" },
-        DiagnosticSignWarn       = { link = "DiagnosticWarn" },
-        DiagnosticSignInfo       = { link = "DiagnosticInfo" },
-        DiagnosticSignHint       = { link = "DiagnosticHint" },
-        DiagnosticSignOk         = { link = "DiagnosticOk" },
-        DiagnosticUnderlineError = { style = "undercurl", sp = spec.diag.error },
-        DiagnosticUnderlineWarn  = { style = "undercurl", sp = spec.diag.warn },
-        DiagnosticUnderlineInfo  = { style = "undercurl", sp = spec.diag.info },
-        DiagnosticUnderlineHint  = { style = "undercurl", sp = spec.diag.hint },
-        DiagnosticUnderlineOk    = { style = "undercurl", sp = spec.diag.ok },
+        DiagnosticError                   = { fg = spec.diag.error },
+        DiagnosticWarn                    = { fg = spec.diag.warn },
+        DiagnosticInfo                    = { fg = spec.diag.info },
+        DiagnosticHint                    = { fg = spec.diag.hint },
+        DiagnosticOk                      = { fg = spec.diag.ok },
+        DiagnosticSignError               = { link = "DiagnosticError" },
+        DiagnosticSignWarn                = { link = "DiagnosticWarn" },
+        DiagnosticSignInfo                = { link = "DiagnosticInfo" },
+        DiagnosticSignHint                = { link = "DiagnosticHint" },
+        DiagnosticSignOk                  = { link = "DiagnosticOk" },
+        DiagnosticUnderlineError          = { style = "undercurl", sp = spec.diag.error },
+        DiagnosticUnderlineWarn           = { style = "undercurl", sp = spec.diag.warn },
+        DiagnosticUnderlineInfo           = { style = "undercurl", sp = spec.diag.info },
+        DiagnosticUnderlineHint           = { style = "undercurl", sp = spec.diag.hint },
+        DiagnosticUnderlineOk             = { style = "undercurl", sp = spec.diag.ok },
 
-        ["@variable"] = { fg = syn.variable, style = stl.variables },
-        ["@variable.builtin"] = { fg = syn.builtin0, style = stl.variables },
-        ["@variable.parameter"] = { fg = syn.builtin1, style = stl.variables },
-        ["@variable.member"] = { fg = syn.field },
-        ["@constant"] = { link = "Constant" },
-        ["@constant.builtin"] = { fg = syn.builtin2, style = stl.keywords },
-        ["@constant.macro"] = { link = "Macro" },
-        ["@module"] = { fg = syn.builtin1 },
-        ["@label"] = { link = "Label" },
-        ["@string"] = { link = "String" },
-        ["@string.regexp"] = { fg = syn.regex, style = stl.strings },
-        ["@string.escape"] = { fg = syn.regex, style = "bold" },
-        ["@string.special"] = { link = "Special" },
-        ["@string.special.url"] = { fg = syn.const, style = "italic,underline" },
-        ["@character"] = { link = "Character" },
-        ["@character.special"] = { link = "SpecialChar" },
-        ["@boolean"] = { link = "Boolean" },
-        ["@number"] = { link = "Number" },
-        ["@number.float"] = { link = "Float" },
-        ["@type"] = { link = "Type" },
-        ["@type.builtin"] = { fg = syn.builtin1, style = stl.types },
-        ["@attribute"] = { link = "Constant" },
-        ["@property"] = { fg = syn.field },
-        ["@function"] = { link = "Function" },
-        ["@function.builtin"] = { fg = syn.builtin0, style = stl.functions },
-        ["@function.macro"] = { fg = syn.builtin0, style = stl.functions },
-        ["@constructor"] = { fg = syn.ident },
-        ["@operator"] = { link = "Operator" },
-        ["@keyword"] = { link = "Keyword" },
-        ["@keyword.function"] = { fg = syn.keyword, style = stl.functions },
-        ["@keyword.operator"] = { fg = syn.operator, style = stl.operators },
-        ["@keyword.import"] = { link = "Include" },
-        ["@keyword.storage"] = { link = "StorageClass" },
-        ["@keyword.repeat"] = { link = "Repeat" },
-        ["@keyword.return"] = { fg = syn.builtin0, style = stl.keywords },
-        ["@keyword.exception"] = { link = "Exception" },
-        ["@keyword.conditional"] = { link = "Conditional" },
-        ["@keyword.conditional.ternary"] = { link = "Conditional" },
-        ["@punctuation.delimiter"] = { fg = syn.bracket },
-        ["@punctuation.bracket"] = { fg = syn.bracket },
-        ["@punctuation.special"] = { fg = syn.builtin1, style = stl.operators },
-        ["@comment"] = { link = "Comment" },
-        ["@comment.error"] = { fg = P.bg[2], bg = spec.diag.error },
-        ["@comment.warning"] = { fg = P.bg[2], bg = spec.diag.warn },
-        ["@comment.todo"] = { fg = P.bg[2], bg = spec.diag.hint },
-        ["@comment.note"] = { fg = P.bg[2], bg = spec.diag.info },
-        ["@markup"] = { fg = P.fg[2] },
-        ["@markup.strong"] = { fg = P.red[1], style = "bold" },
-        ["@markup.italic"] = { link = "Italic" },
-        ["@markup.strikethrough"] = { fg = P.fg[2], style = "strikethrough" },
-        ["@markup.underline"] = { link = "Underline" },
-        ["@markup.heading"] = { link = "Title" },
-        ["@markup.quote"] = { fg = P.fg[3] },
-        ["@markup.math"] = { fg = syn.func },
-        ["@markup.link"] = { fg = syn.keyword, style = "bold" },
-        ["@markup.link.label"] = { link = "Special" },
-        ["@markup.link.url"] = { fg = syn.const, style = "italic,underline" },
-        ["@markup.raw"] = { fg = syn.ident, style = "italic" },
-        ["@markup.raw.block"] = { fg = P.pink[1] },
-        ["@markup.list"] = { fg = syn.builtin1, style = stl.operators },
-        ["@markup.list.checked"] = { fg = P.green[1] },
-        ["@markup.list.unchecked"] = { fg = P.yellow[1] },
-        ["@diff.plus"] = { link = "diffAdded" },
-        ["@diff.minus"] = { link = "diffRemoved" },
-        ["@diff.delta"] = { link = "diffChanged" },
-        ["@tag"] = { fg = syn.keyword },
-        ["@tag.attribute"] = { fg = syn.func, style = "italic" },
-        ["@tag.delimiter"] = { fg = syn.builtin1 },
-        ["@label.json"] = { fg = syn.func },
-        ["@constructor.lua"] = { fg = P.fg[3] },
-        ["@field.rust"] = { fg = P.fg[3] },
-        ["@variable.member.yaml"] = { fg = syn.func },
+        ["@variable"]                     = { fg = syn.variable, style = stl.variables },
+        ["@variable.builtin"]             = { fg = syn.builtin0, style = stl.variables },
+        ["@variable.parameter"]           = { fg = syn.builtin1, style = stl.variables },
+        ["@variable.member"]              = { fg = syn.field },
+        ["@constant"]                     = { link = "Constant" },
+        ["@constant.builtin"]             = { fg = syn.builtin2, style = stl.keywords },
+        ["@constant.macro"]               = { link = "Macro" },
+        ["@module"]                       = { fg = syn.builtin1 },
+        ["@label"]                        = { link = "Label" },
+        ["@string"]                       = { link = "String" },
+        ["@string.regexp"]                = { fg = syn.regex, style = stl.strings },
+        ["@string.escape"]                = { fg = syn.regex, style = "bold" },
+        ["@string.special"]               = { link = "Special" },
+        ["@string.special.url"]           = { fg = syn.const, style = "italic,underline" },
+        ["@character"]                    = { link = "Character" },
+        ["@character.special"]            = { link = "SpecialChar" },
+        ["@boolean"]                      = { link = "Boolean" },
+        ["@number"]                       = { link = "Number" },
+        ["@number.float"]                 = { link = "Float" },
+        ["@type"]                         = { link = "Type" },
+        ["@type.builtin"]                 = { fg = syn.builtin1, style = stl.types },
+        ["@attribute"]                    = { link = "Constant" },
+        ["@property"]                     = { fg = syn.field },
+        ["@function"]                     = { link = "Function" },
+        ["@function.builtin"]             = { fg = syn.builtin0, style = stl.functions },
+        ["@function.macro"]               = { fg = syn.builtin0, style = stl.functions },
+        ["@constructor"]                  = { fg = syn.ident },
+        ["@operator"]                     = { link = "Operator" },
+        ["@keyword"]                      = { link = "Keyword" },
+        ["@keyword.function"]             = { fg = syn.keyword, style = stl.functions },
+        ["@keyword.operator"]             = { fg = syn.operator, style = stl.operators },
+        ["@keyword.import"]               = { link = "Include" },
+        ["@keyword.storage"]              = { link = "StorageClass" },
+        ["@keyword.repeat"]               = { link = "Repeat" },
+        ["@keyword.return"]               = { fg = syn.builtin0, style = stl.keywords },
+        ["@keyword.exception"]            = { link = "Exception" },
+        ["@keyword.conditional"]          = { link = "Conditional" },
+        ["@keyword.conditional.ternary"]  = { link = "Conditional" },
+        ["@punctuation.delimiter"]        = { fg = syn.bracket },
+        ["@punctuation.bracket"]          = { fg = syn.bracket },
+        ["@punctuation.special"]          = { fg = syn.builtin1, style = stl.operators },
+        ["@comment"]                      = { link = "Comment" },
+        ["@comment.error"]                = { fg = P.bg[2], bg = spec.diag.error },
+        ["@comment.warning"]              = { fg = P.bg[2], bg = spec.diag.warn },
+        ["@comment.todo"]                 = { fg = P.bg[2], bg = spec.diag.hint },
+        ["@comment.note"]                 = { fg = P.bg[2], bg = spec.diag.info },
+        ["@markup"]                       = { fg = P.fg[2] },
+        ["@markup.strong"]                = { fg = P.red[1], style = "bold" },
+        ["@markup.italic"]                = { link = "Italic" },
+        ["@markup.strikethrough"]         = { fg = P.fg[2], style = "strikethrough" },
+        ["@markup.underline"]             = { link = "Underline" },
+        ["@markup.heading"]               = { link = "Title" },
+        ["@markup.quote"]                 = { fg = P.fg[3] },
+        ["@markup.math"]                  = { fg = syn.func },
+        ["@markup.link"]                  = { fg = syn.keyword, style = "bold" },
+        ["@markup.link.label"]            = { link = "Special" },
+        ["@markup.link.url"]              = { fg = syn.const, style = "italic,underline" },
+        ["@markup.raw"]                   = { fg = syn.ident, style = "italic" },
+        ["@markup.raw.block"]             = { fg = P.pink[1] },
+        ["@markup.list"]                  = { fg = syn.builtin1, style = stl.operators },
+        ["@markup.list.checked"]          = { fg = P.green[1] },
+        ["@markup.list.unchecked"]        = { fg = P.yellow[1] },
+        ["@diff.plus"]                    = { link = "diffAdded" },
+        ["@diff.minus"]                   = { link = "diffRemoved" },
+        ["@diff.delta"]                   = { link = "diffChanged" },
+        ["@tag"]                          = { fg = syn.keyword },
+        ["@tag.attribute"]                = { fg = syn.func, style = "italic" },
+        ["@tag.delimiter"]                = { fg = syn.builtin1 },
+        ["@label.json"]                   = { fg = syn.func },
+        ["@constructor.lua"]              = { fg = P.fg[3] },
+        ["@field.rust"]                   = { fg = P.fg[3] },
+        ["@variable.member.yaml"]         = { fg = syn.func },
 
-        ["@lsp.type.boolean"] = { link = "@boolean" },
-        ["@lsp.type.builtinType"] = { link = "@type.builtin" },
-        ["@lsp.type.comment"] = { link = "@comment" },
-        ["@lsp.type.enum"] = { link = "@type" },
-        ["@lsp.type.enumMember"] = { link = "@constant" },
-        ["@lsp.type.escapeSequence"] = { link = "@string.escape" },
-        ["@lsp.type.formatSpecifier"] = { link = "@punctuation.special" },
-        ["@lsp.type.interface"] = { fg = syn.builtin3 },
-        ["@lsp.type.keyword"] = { link = "@keyword" },
-        ["@lsp.type.namespace"] = { link = "@module" },
-        ["@lsp.type.number"] = { link = "@number" },
-        ["@lsp.type.operator"] = { link = "@operator" },
-        ["@lsp.type.parameter"] = { link = "@parameter" },
-        ["@lsp.type.property"] = { link = "@property" },
-        ["@lsp.type.selfKeyword"] = { link = "@variable.builtin" },
-        ["@lsp.type.typeAlias"] = { link = "@type.definition" },
+        ["@lsp.type.boolean"]             = { link = "@boolean" },
+        ["@lsp.type.builtinType"]         = { link = "@type.builtin" },
+        ["@lsp.type.comment"]             = { link = "@comment" },
+        ["@lsp.type.enum"]                = { link = "@type" },
+        ["@lsp.type.enumMember"]          = { link = "@constant" },
+        ["@lsp.type.escapeSequence"]      = { link = "@string.escape" },
+        ["@lsp.type.formatSpecifier"]     = { link = "@punctuation.special" },
+        ["@lsp.type.interface"]           = { fg = syn.builtin3 },
+        ["@lsp.type.keyword"]             = { link = "@keyword" },
+        ["@lsp.type.namespace"]           = { link = "@module" },
+        ["@lsp.type.number"]              = { link = "@number" },
+        ["@lsp.type.operator"]            = { link = "@operator" },
+        ["@lsp.type.parameter"]           = { link = "@parameter" },
+        ["@lsp.type.property"]            = { link = "@property" },
+        ["@lsp.type.selfKeyword"]         = { link = "@variable.builtin" },
+        ["@lsp.type.typeAlias"]           = { link = "@type.definition" },
         ["@lsp.type.unresolvedReference"] = { link = "@error" },
     }) do
         if opts.style and opts.style ~= "NONE" then

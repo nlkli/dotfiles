@@ -1,34 +1,83 @@
-syntax on
-filetype plugin indent on
+" === UI ===
 set number
 set relativenumber
-set hidden
-set noswapfile
-set autoread
-set undofile
-set expandtab
+set wrap
+set scrolloff=4
+set sidescrolloff=4
+set showmatch
+set matchtime=2
+set guicursor=i:block
+
+" === Tabs & Indent ===
+set tabstop=4
 set shiftwidth=4
 set softtabstop=4
-set tabstop=4
+set expandtab
 set smartindent
+set autoindent
+
+" === Search ===
 set ignorecase
 set smartcase
-set incsearch
 set nohlsearch
-set wrap
-set linebreak
-set scrolloff=6
-set sidescrolloff=4
+set incsearch
+
+" === Behaviour ===
+set hidden
+set backspace=indent,eol,start
+set noerrorbells
+set belloff=all
 set mouse=a
-set wildmenu
+set encoding=UTF-8
+set modifiable
+
+" === Files ===
+set nobackup
+set nowritebackup
+set noswapfile
+set undofile
+set undolevels=10000
+set undodir=~/.vim/undodir
+
+if !isdirectory($HOME . "/.vim/undodir")
+    call mkdir($HOME . "/.vim/undodir", "p")
+endif
+
+" === Performance ===
 set updatetime=300
 set timeoutlen=500
-set belloff=all
-set undodir=~/.vim/undodir
-let g:netrw_banner = 0
-let g:netrw_liststyle = 1
+set ttimeoutlen=0
+set autoread
+set autowrite
+set synmaxcol=300
+set redrawtime=10000
+set maxmempattern=20000
 
-let mapleader = " "
+" === Folding ===
+set foldlevel=99
+
+" === Misc ===
+set formatoptions=jcroqlnt
+set grepformat=%f:%l:%c:%m
+set wildmenu
+set wildmode=longest:full,full
+set linebreak
+
+" === Syntax ===
+syntax on
+filetype plugin indent on
+
+" === Netrw ===
+let g:netrw_banner=0
+let g:netrw_liststyle=1
+
+" === Langmap (RU) ===
+set langmap=ёй,цw,уe,кr,еt,нy,гu,шi,щo,зp,х[,ъ],фa,ыs,вd,аf,пg,рh,оj,лk,дl,ж\\;,э',яz,чx,сc,мv,иb,тn,ьm,ё`,ЙQ,ЦW,УE,КR,ЕT,НY,ГU,ШI,ЩO,ЗP,Х{,Ъ},ФA,ЫS,ВD,АF,ПG,РH,ОJ,ЛK,ДL,Ж\\:,Э\",ЯZ,ЧX,СC,МV,ИB,ТN,ЬM,Ё~
+set langremap
+
+" === Leader ===
+let mapleader=" "
+
 nnoremap <leader>y "+y
 xnoremap <leader>y "+y
 nnoremap <leader>p "+p
@@ -42,11 +91,45 @@ nnoremap <leader>E :edit .<CR>
 nnoremap <leader>r :edit #<CR>
 nnoremap <leader>s :%s/\<<C-r><C-w>\>//g<Left><Left>
 xnoremap <leader>s y:%s/<C-r>"//g<Left><Left>
-nnoremap <leader>u :source ~/.vimrc<CR>
 nnoremap <leader>o :copen<CR>
-nnoremap <leader>c :cclose<CR>
-" nnoremap <leader>t :tabnew<CR>
-nnoremap <leader>t :tabnew | edit .<CR>
-nnoremap <leader>T :tabnew | terminal<CR>
-nnoremap n nzzzv
-nnoremap N Nzzzv
+nnoremap <leader>lo :lopen<CR>
+nnoremap <leader>c :cclose \| lclose<CR>
+nnoremap <leader>t :tabnew \| edit .<CR>
+" nnoremap <leader>T :tabnew \| terminal<CR>
+nnoremap <leader>R :source ~/.vimrc<CR>
+
+" === Russian leader mappings ===
+nnoremap <leader>н "+y
+xnoremap <leader>н "+y
+nnoremap <leader>з "+p
+xnoremap <leader>з "+p
+nnoremap <leader>З "+P
+xnoremap <leader>З "+P
+nnoremap <leader>й :x<CR>
+nnoremap <leader>ц :update<CR>
+nnoremap <leader>у :edit %:h<CR>
+nnoremap <leader>У :edit .<CR>
+nnoremap <leader>к :edit #<CR>
+nnoremap <leader>ы :%s/\<<C-r><C-w>\>//g<Left><Left>
+xnoremap <leader>ы y:%s/<C-r>"//g<Left><Left>
+nnoremap <leader>щ :copen<CR>
+nnoremap <leader>дщ :lopen<CR>
+nnoremap <leader>с :cclose \| lclose<CR>
+nnoremap <leader>е :tabnew \| edit .<CR>
+" nnoremap <leader>Е :tabnew \| terminal<CR>
+nnoremap <leader>К :source ~/.vimrc<CR>
+
+if executable("rg")
+    set grepprg=rg\ --vimgrep
+    command! -nargs=+ -complete=file Rg silent grep! <args> | copen
+    nnoremap <leader>g :Rg 
+endif
+
+if executable("fd")
+    command! -nargs=+ -complete=file Fd
+        \ let $FD_ARGS = <q-args> |
+        \ set efm=%f |
+        \ lexpr system("fd " . $FD_ARGS) |
+        \ lopen
+    nnoremap <leader>f :Fd 
+endif
