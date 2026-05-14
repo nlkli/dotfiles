@@ -27,6 +27,7 @@ compinit
 bindkey '^r' history-incremental-search-backward
 bindkey '^p' up-line-or-history
 bindkey '^n' down-line-or-history
+bindkey '^y' copy-prompt-line-to-clipboard
 
 if command -v pbcopy >/dev/null 2>&1; then
   alias clipcopy='pbcopy'
@@ -70,12 +71,9 @@ zle -N vi-put-clipboard-after
 zle -N vi-put-clipboard-before
 zle -N copy-prompt-line-to-clipboard
 
-bindkey -M vicmd ' ' undefined-key
-bindkey -M vicmd ' y' vi-yank-clipboard
-bindkey -M vicmd ' p' vi-put-clipboard-after
-bindkey -M vicmd ' P' vi-put-clipboard-before
-bindkey -M vicmd '^y' vi-put-clipboard-before
-bindkey '^y' copy-prompt-line-to-clipboard
+bindkey -M vicmd '^y' vi-yank-clipboard
+bindkey -M vicmd '^p' vi-put-clipboard-after
+bindkey -M vicmd '^P' vi-put-clipboard-before
 bindkey -M viins '^?' backward-delete-char
 
 function zle-keymap-select {
