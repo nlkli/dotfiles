@@ -102,6 +102,10 @@ vim.keymap.set("n", "<leader>T", ":tabnew | terminal<CR>")
 vim.keymap.set("n", "<leader>F", vim.lsp.buf.format)
 vim.keymap.set("n", "<leader>O", ":Oil<CR>")
 vim.keymap.set("n", "<leader>R", ":source ~/.config/nvim/init.lua<CR>")
+vim.keymap.set("n", "gd", vim.lsp.buf.definition)
+vim.keymap.set("n", "gD", vim.lsp.buf.declaration)
+vim.keymap.set("n", "gr", vim.lsp.buf.references)
+vim.keymap.set("n", "gi", vim.lsp.buf.implementation)
 
 vim.keymap.set({ "n", "x" }, "<leader>н", '"+y')
 vim.keymap.set({ "n", "x" }, "<leader>з", '"+p')
@@ -121,6 +125,10 @@ vim.keymap.set("n", "<leader>Е", ":tabnew | terminal<CR>")
 vim.keymap.set("n", "<leader>а", vim.lsp.buf.format)
 vim.keymap.set("n", "<leader>Щ", ":Oil<CR>")
 vim.keymap.set("n", "<leader>К", ":source ~/.config/nvim/init.lua<CR>")
+vim.keymap.set("n", "пв", vim.lsp.buf.definition)
+vim.keymap.set("n", "пВ", vim.lsp.buf.declaration)
+vim.keymap.set("n", "пк", vim.lsp.buf.references)
+vim.keymap.set("n", "пш", vim.lsp.buf.implementation)
 
 vim.api.nvim_create_autocmd("TermOpen", {
     pattern = "*",
