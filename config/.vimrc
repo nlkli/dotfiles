@@ -82,9 +82,9 @@ xnoremap <leader>s y:%s/<C-r>"//g<Left><Left>
 nnoremap <leader>o :copen<CR>
 nnoremap <leader>lo :lopen<CR>
 nnoremap <leader>n :cnext<CR>
-nnoremap <leader>p :cprev<CR>
+nnoremap <leader>N :cprev<CR>
 nnoremap <leader>ln :lnext<CR>
-nnoremap <leader>lp :lprev<CR>
+nnoremap <leader>lN :lprev<CR>
 nnoremap <leader>c :cclose \| lclose<CR>
 nnoremap <leader>t :tabnew \| edit .<CR>
 nnoremap <leader>R :source ~/.vimrc<CR>
@@ -105,9 +105,9 @@ xnoremap <leader>ы y:%s/<C-r>"//g<Left><Left>
 nnoremap <leader>щ :copen<CR>
 nnoremap <leader>дщ :lopen<CR>
 nnoremap <leader>т :cnext<CR>
-nnoremap <leader>з :cprev<CR>
+nnoremap <leader>Т :cprev<CR>
 nnoremap <leader>дт :lnext<CR>
-nnoremap <leader>дз :lprev<CR>
+nnoremap <leader>дТ :lprev<CR>
 nnoremap <leader>с :cclose \| lclose<CR>
 nnoremap <leader>е :tabnew \| edit .<CR>
 nnoremap <leader>К :source ~/.vimrc<CR>

@@ -77,6 +77,12 @@ vim.diagnostic.config({
     virtual_text = false,
     virtual_lines = false,
     update_in_insert = false,
+    float = {
+        border = "rounded",
+        source = "always",
+        header = "",
+        prefix = "",
+    },
 })
 
 -- require('vim._core.ui2').enable() -- New UI opt-in
@@ -104,9 +110,9 @@ vim.keymap.set("x", "<leader>s", [[y:%s/<C-r>"//g<Left><Left>]])
 vim.keymap.set("n", "<leader>o", ":copen<CR>")
 vim.keymap.set("n", "<leader>lo", ":lopen<CR>")
 vim.keymap.set("n", "<leader>n", ":cnext<CR>")
-vim.keymap.set("n", "<leader>p", ":cprev<CR>")
+vim.keymap.set("n", "<leader>N", ":cprev<CR>")
 vim.keymap.set("n", "<leader>ln", ":lnext<CR>")
-vim.keymap.set("n", "<leader>lp", ":lprev<CR>")
+vim.keymap.set("n", "<leader>lN", ":lprev<CR>")
 vim.keymap.set("n", "<leader>c", ":cclose | lclose<CR>")
 vim.keymap.set("n", "<leader>t", ":tabnew | edit .<CR>")
 vim.keymap.set("n", "<leader>T", ":tabnew | terminal<CR>")
@@ -117,7 +123,10 @@ vim.keymap.set("n", "gd", vim.lsp.buf.definition)
 vim.keymap.set("n", "gD", vim.lsp.buf.declaration)
 vim.keymap.set("n", "gr", vim.lsp.buf.references)
 vim.keymap.set("n", "gi", vim.lsp.buf.implementation)
-vim.keymap.set("n", "<leader>d", vim.diagnostic.setqflist)
+vim.keymap.set("n", "<leader>D", vim.diagnostic.setqflist)
+vim.keymap.set("n", "<leader>d", function()
+  vim.diagnostic.open_float({ scope = "line" })
+end)
 
 vim.keymap.set({ "n", "x" }, "<leader>н", '"+y')
 vim.keymap.set({ "n", "x" }, "<leader>з", '"+p')
@@ -132,9 +141,9 @@ vim.keymap.set("x", "<leader>ы", [[y:%s/<C-r>"//g<Left><Left>]])
 vim.keymap.set("n", "<leader>щ", ":copen<CR>")
 vim.keymap.set("n", "<leader>дщ", ":lopen<CR>")
 vim.keymap.set("n", "<leader>т", ":cnext<CR>")
-vim.keymap.set("n", "<leader>з", ":cprev<CR>")
+vim.keymap.set("n", "<leader>Т", ":cprev<CR>")
 vim.keymap.set("n", "<leader>дт", ":lnext<CR>")
-vim.keymap.set("n", "<leader>дз", ":lprev<CR>")
+vim.keymap.set("n", "<leader>дТ", ":lprev<CR>")
 vim.keymap.set("n", "<leader>с", ":cclose | lclose<CR>")
 vim.keymap.set("n", "<leader>е", ":tabnew | edit .<CR>")
 vim.keymap.set("n", "<leader>Е", ":tabnew | terminal<CR>")
@@ -145,7 +154,10 @@ vim.keymap.set("n", "пв", vim.lsp.buf.definition)
 vim.keymap.set("n", "пВ", vim.lsp.buf.declaration)
 vim.keymap.set("n", "пк", vim.lsp.buf.references)
 vim.keymap.set("n", "пш", vim.lsp.buf.implementation)
-vim.keymap.set("n", "<leader>в", vim.diagnostic.setqflist)
+vim.keymap.set("n", "<leader>В", vim.diagnostic.setqflist)
+vim.keymap.set("n", "<leader>в", function()
+  vim.diagnostic.open_float({ scope = "line" })
+end)
 
 vim.api.nvim_create_autocmd("TermOpen", {
     pattern = "*",
