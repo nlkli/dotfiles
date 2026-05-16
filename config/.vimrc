@@ -1,4 +1,3 @@
-" === UI ===
 set number
 set relativenumber
 set wrap
@@ -8,7 +7,6 @@ set showmatch
 set matchtime=2
 set guicursor=i:block
 
-" === Tabs & Indent ===
 set tabstop=4
 set shiftwidth=4
 set softtabstop=4
@@ -16,13 +14,11 @@ set expandtab
 set smartindent
 set autoindent
 
-" === Search ===
 set ignorecase
 set smartcase
 set nohlsearch
 set incsearch
 
-" === Behaviour ===
 set hidden
 set backspace=indent,eol,start
 set noerrorbells
@@ -31,7 +27,6 @@ set mouse=a
 set encoding=UTF-8
 set modifiable
 
-" === Files ===
 set nobackup
 set nowritebackup
 set noswapfile
@@ -43,7 +38,6 @@ if !isdirectory($HOME . "/.vim/undodir")
     call mkdir($HOME . "/.vim/undodir", "p")
 endif
 
-" === Performance ===
 set updatetime=300
 set timeoutlen=500
 set ttimeoutlen=0
@@ -53,29 +47,23 @@ set synmaxcol=300
 set redrawtime=10000
 set maxmempattern=20000
 
-" === Folding ===
 set foldlevel=99
 
-" === Misc ===
 set formatoptions=jcroqlnt
 set grepformat=%f:%l:%c:%m
 set wildmenu
 set wildmode=longest:full,full
 set linebreak
 
-" === Syntax ===
 syntax on
 filetype plugin indent on
 
-" === Netrw ===
 let g:netrw_banner=0
 let g:netrw_liststyle=1
 
-" === Langmap (RU) ===
 set langmap=ёй,цw,уe,кr,еt,нy,гu,шi,щo,зp,х[,ъ],фa,ыs,вd,аf,пg,рh,оj,лk,дl,ж\\;,э',яz,чx,сc,мv,иb,тn,ьm,ё`,ЙQ,ЦW,УE,КR,ЕT,НY,ГU,ШI,ЩO,ЗP,Х{,Ъ},ФA,ЫS,ВD,АF,ПG,РH,ОJ,ЛK,ДL,Ж\\:,Э\",ЯZ,ЧX,СC,МV,ИB,ТN,ЬM,Ё~
 set langremap
 
-" === Leader ===
 let mapleader=" "
 
 nnoremap <leader>y "+y
@@ -93,12 +81,14 @@ nnoremap <leader>s :%s/\<<C-r><C-w>\>//g<Left><Left>
 xnoremap <leader>s y:%s/<C-r>"//g<Left><Left>
 nnoremap <leader>o :copen<CR>
 nnoremap <leader>lo :lopen<CR>
+nnoremap <leader>n :cnext<CR>
+nnoremap <leader>p :cprev<CR>
+nnoremap <leader>ln :lnext<CR>
+nnoremap <leader>lp :lprev<CR>
 nnoremap <leader>c :cclose \| lclose<CR>
 nnoremap <leader>t :tabnew \| edit .<CR>
-" nnoremap <leader>T :tabnew \| terminal<CR>
 nnoremap <leader>R :source ~/.vimrc<CR>
 
-" === Russian leader mappings ===
 nnoremap <leader>н "+y
 xnoremap <leader>н "+y
 nnoremap <leader>з "+p
@@ -114,9 +104,12 @@ nnoremap <leader>ы :%s/\<<C-r><C-w>\>//g<Left><Left>
 xnoremap <leader>ы y:%s/<C-r>"//g<Left><Left>
 nnoremap <leader>щ :copen<CR>
 nnoremap <leader>дщ :lopen<CR>
+nnoremap <leader>т :cnext<CR>
+nnoremap <leader>з :cprev<CR>
+nnoremap <leader>дт :lnext<CR>
+nnoremap <leader>дз :lprev<CR>
 nnoremap <leader>с :cclose \| lclose<CR>
 nnoremap <leader>е :tabnew \| edit .<CR>
-" nnoremap <leader>Е :tabnew \| terminal<CR>
 nnoremap <leader>К :source ~/.vimrc<CR>
 
 if executable("rg")
