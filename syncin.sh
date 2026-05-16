@@ -8,7 +8,14 @@ sync_dir() {
     local src="$2"
     local dst="$3"
 
-    mkdir -p $dst
+    if [ ! -d "$src" ]; then
+        echo "$name: source not found ($src)"
+        return
+    fi
+
+    if [ ! -d "$dst" ]; then
+        mkdir -p "$dst"
+    fi
     
     if ! diff -rq "$src" "$dst" >/dev/null; then
         cp -rf "$src/." "$dst"
@@ -20,6 +27,16 @@ sync_file() {
     local name="$1"
     local src="$2"
     local dst="$3"
+
+    if [ ! -f "$src" ]; then
+        echo "$name: source not found ($src)"
+        return
+    fi
+
+    if [ ! -f "$dst" ]; then
+        mkdir -p $(dirname "$dst")
+        touch "$dst"
+    fi
     
     if ! diff -q "$src" "$dst" >/dev/null; then
         cp -f "$src" "$dst"
