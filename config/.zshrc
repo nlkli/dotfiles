@@ -5,7 +5,7 @@ alias e='$EDITOR'
 alias y='yazi'
 alias c='clear'
 alias q='exit'
-alias ll='ls -lah'
+alias ll='ls -lah --color=auto'
 
 export PS1='%n@%m:%~$ '
 
@@ -97,5 +97,5 @@ function zle-keymap-select {
 zle -N zle-keymap-select
 
 imgview() {
-  ffplay -loglevel quiet -noborder -infbuf "$@"
+  ffplay -loglevel quiet -noborder -infbuf -autoexit "$@"
 }
