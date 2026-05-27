@@ -1,7 +1,8 @@
 [mgr]
 show_hidden = true
-ratio = [1, 2, 4]
+ratio = [1, 2, 3]
 linemode = "size"
+sort_by = "natural"
 [opener]
 edit = [
     { run = '${EDITOR:-nvim} "$@"', desc = "editor", block = true },
@@ -13,17 +14,15 @@ open = [
 extract = [
 	{ run = 'ya pub extract --list "$@"', desc = "Extract here", for = "unix" },
 ]
-image = [
-    { run = 'ffplay -loglevel quiet -noborder -infbuf "$@"', desc = "Open image", for = "unix" }
+media = [
+    { run = 'ffplay -loglevel quiet -noborder -infbuf -loop 0 "$@"', desc = "open image", for = "unix" }
 ]
 [open]
 rules = [
-	{ name = "*/", use = "edit" },
     { mime = "text/*", use = "edit" },
-    { mime = "image/*", use = "image" },
-    { mime = "{audio,video}/*", use = "open" },
+    { mime = "{image,audio,video}/*", use = "media" },
     { mime = "application/pdf", use = "open" },
     { mime = "application/{zip,rar,7z*,tar,gzip,xz,zstd,bzip*,lzma,compress,archive,cpio,arj,xar,ms-cab*}", use = ["extract", "open"] },
     { mime = "inode/empty", use = "edit" },
-	{ name = "*", use = [ "edit", "open" ] },
+	{ mime = "*", use = [ "edit", "open" ] },
 ]

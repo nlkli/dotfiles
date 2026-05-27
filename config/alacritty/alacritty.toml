@@ -15,8 +15,8 @@ background = "#c1c1c1"
 [colors.normal]
 black = "#000000"
 red = "#5f8787"
-green = "#eceee3"
-yellow = "#974b46"
+green = "#aa9988"
+yellow = "#777755"
 blue = "#888888"
 magenta = "#999999"
 cyan = "#aaaaaa"
@@ -25,8 +25,8 @@ white = "#c1c1c1"
 [colors.bright]
 black = "#000000"
 red = "#5f8787"
-green = "#eceee3"
-yellow = "#974b46"
+green = "#aa9988"
+yellow = "#777755"
 blue = "#888888"
 magenta = "#999999"
 cyan = "#aaaaaa"
@@ -35,8 +35,8 @@ white = "#c1c1c1"
 [colors.dim]
 black = "#000000"
 red = "#517373"
-green = "#c9cac1"
-yellow = "#80403c"
+green = "#918274"
+yellow = "#656548"
 blue = "#747474"
 magenta = "#828282"
 cyan = "#919191"
@@ -44,7 +44,7 @@ white = "#a4a4a4"
 
 [[colors.indexed_colors]]
 index = 16
-color = "#7b6967"
+color = "#6b7f6e"
 
 [[colors.indexed_colors]]
 index = 17
@@ -58,7 +58,6 @@ shape = "Block"
 
 [window]
 dynamic_padding = true
-title = "Terminal"
 
 [window.padding]
 x = 8

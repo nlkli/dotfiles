@@ -2,7 +2,6 @@ export PATH=$HOME/bin:/usr/local/bin:$PATH
 export EDITOR=nvim
 
 alias e='$EDITOR'
-alias y='yazi'
 alias c='clear'
 alias q='exit'
 alias ll='ls -lah --color=auto'
@@ -97,5 +96,13 @@ function zle-keymap-select {
 zle -N zle-keymap-select
 
 imgview() {
-  ffplay -loglevel quiet -noborder -infbuf -autoexit "$@"
+  ffplay -loglevel quiet -noborder -infbuf -loop 0 "$@"
+}
+
+function y() {
+	local tmp="$(mktemp -t "yazi-cwd.XXXXXX")" cwd
+	command yazi "$@" --cwd-file="$tmp"
+	IFS= read -r -d '' cwd < "$tmp"
+	[ "$cwd" != "$PWD" ] && [ -d "$cwd" ] && builtin cd -- "$cwd"
+	command rm -f -- "$tmp"
 }
