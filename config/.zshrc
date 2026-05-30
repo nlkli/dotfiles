@@ -1,4 +1,5 @@
-export PATH=$HOME/bin:/usr/local/bin:$PATH
+export PATH=$HOME/bin:$HOME/.local/bin:/usr/local/bin:$PATH
+export TERM=xterm-256color
 export EDITOR=nvim
 
 alias e='$EDITOR'

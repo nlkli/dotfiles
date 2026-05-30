@@ -309,37 +309,37 @@ end
 
 -- [STARTRECOLMARK]
 
--- Black Metal (Nile)
+-- Rose Pine
 
 local function applyRecol()
     vim.cmd("highlight clear")
     if vim.fn.has("syntax_on") then vim.cmd("syntax reset") end
 
     local P = {
-        black   = { "#000000", "#000000", "#000000" },
-        red     = { "#5f8787", "#5f8787", "#517373" },
-        green   = { "#aa9988", "#aa9988", "#918274" },
-        yellow  = { "#777755", "#777755", "#656548" },
-        blue    = { "#888888", "#888888", "#747474" },
-        magenta = { "#999999", "#999999", "#828282" },
-        cyan    = { "#aaaaaa", "#aaaaaa", "#919191" },
-        white   = { "#c1c1c1", "#c1c1c1", "#a4a4a4" },
-        orange  = { "#6b7f6e", "#6b7f6e", "#5b6c5e" },
-        pink    = { "#90a4a4", "#90a4a4", "#7a8b8b" },
-        bg = { "#0b0b0b", "#000000", "#0f0f0f", "#1f1f1f", "#3b3b3b" },
-        fg = { "#d0d0d0", "#c1c1c1", "#868686", "#515151" },
-        sel = { "#1d1d1d", "#2e2e2e" },
+        black   = { "#26233a", "#26233a", "#201e31" },
+        red     = { "#eb6f92", "#eb6f92", "#c85e7c" },
+        green   = { "#31748f", "#31748f", "#2a637a" },
+        yellow  = { "#f6c177", "#f6c177", "#d1a465" },
+        blue    = { "#9ccfd8", "#9ccfd8", "#85b0b8" },
+        magenta = { "#c4a7e7", "#c4a7e7", "#a78ec4" },
+        cyan    = { "#ebbcba", "#ebbcba", "#c8a09e" },
+        white   = { "#e0def4", "#e0def4", "#bebdcf" },
+        orange  = { "#f19885", "#f19885", "#cc8171" },
+        pink    = { "#e6a7c3", "#e6a7c3", "#c38ea6" },
+        bg = { "#111019", "#191724", "#242133", "#2e2b43", "#423c5f" },
+        fg = { "#eae8ff", "#e0def4", "#aaa9b9", "#797884" },
+        sel = { "#373543", "#494756" },
         cur = { 
-            bg = "#c1c1c1",
-            fg = "#8e8e8e",
+            bg = "#e0def4",
+            fg = "#191724",
         },
-        comment = "#747474",
-        status_line = "#0b0b0b",
+        comment = "#908ea1",
+        status_line = "#111019",
         diff = {
-            add = "#72675b",
-            delete = "#405a5a",
-            change = "#5b5b5b",
-            text = "#5c5c5c",
+            add = "#29556c",
+            delete = "#a6526e",
+            change = "#71929d",
+            text = "#806d99",
         }
     }
 
