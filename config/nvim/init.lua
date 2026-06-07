@@ -269,6 +269,10 @@ if #treesitter_parsers > 0 then
         { src = "https://github.com/nvim-treesitter/nvim-treesitter", branch = "main" },
     })
     require("nvim-treesitter").install(treesitter_parsers)
+    vim.api.nvim_create_autocmd("FileType", {
+        pattern = { "<filetype>" },
+        callback = function() vim.treesitter.start() end,
+    })
 end
 
 if #lspservers_ensure_installed > 0 then
@@ -309,37 +313,37 @@ end
 
 -- [STARTRECOLMARK]
 
--- Rose Pine
+-- Material Ocean
 
 local function applyRecol()
     vim.cmd("highlight clear")
     if vim.fn.has("syntax_on") then vim.cmd("syntax reset") end
 
     local P = {
-        black   = { "#26233a", "#26233a", "#201e31" },
-        red     = { "#eb6f92", "#eb6f92", "#c85e7c" },
-        green   = { "#31748f", "#31748f", "#2a637a" },
-        yellow  = { "#f6c177", "#f6c177", "#d1a465" },
-        blue    = { "#9ccfd8", "#9ccfd8", "#85b0b8" },
-        magenta = { "#c4a7e7", "#c4a7e7", "#a78ec4" },
-        cyan    = { "#ebbcba", "#ebbcba", "#c8a09e" },
-        white   = { "#e0def4", "#e0def4", "#bebdcf" },
-        orange  = { "#f19885", "#f19885", "#cc8171" },
-        pink    = { "#e6a7c3", "#e6a7c3", "#c38ea6" },
-        bg = { "#111019", "#191724", "#242133", "#2e2b43", "#423c5f" },
-        fg = { "#eae8ff", "#e0def4", "#aaa9b9", "#797884" },
-        sel = { "#373543", "#494756" },
+        black   = { "#546e7a", "#546e7a", "#475e68" },
+        red     = { "#ff5370", "#ff5370", "#d9475f" },
+        green   = { "#c3e88d", "#c3e88d", "#a6c578" },
+        yellow  = { "#ffcb6b", "#ffcb6b", "#d9ad5b" },
+        blue    = { "#82aaff", "#82aaff", "#6f91d9" },
+        magenta = { "#c792ea", "#c792ea", "#a97cc7" },
+        cyan    = { "#89ddff", "#89ddff", "#74bcd9" },
+        white   = { "#ffffff", "#ffffff", "#d9d9d9" },
+        orange  = { "#ff8f6e", "#ff8f6e", "#d97a5d" },
+        pink    = { "#ffa9b8", "#ffa9b8", "#d9909c" },
+        bg = { "#090a0f", "#0f111a", "#181b29", "#212539", "#313755" },
+        fg = { "#9da1b1", "#8f93a2", "#5b5e67", "#2c2d32" },
+        sel = { "#22252e", "#493e14" },
         cur = { 
-            bg = "#e0def4",
-            fg = "#191724",
+            bg = "#ffcc00",
+            fg = "#0f111a",
         },
-        comment = "#908ea1",
-        status_line = "#111019",
+        comment = "#5c5f6c",
+        status_line = "#090a0f",
         diff = {
-            add = "#29556c",
-            delete = "#a6526e",
-            change = "#71929d",
-            text = "#806d99",
+            add = "#88a167",
+            delete = "#b03d54",
+            change = "#5c78b3",
+            text = "#7d5e97",
         }
     }
 

@@ -1,54 +1,54 @@
 [colors.primary]
-background = "#191724"
-foreground = "#e0def4"
-dim_foreground = "#aaa9b9"
-bright_foreground = "#eae8ff"
+background = "#0f111a"
+foreground = "#8f93a2"
+dim_foreground = "#5b5e67"
+bright_foreground = "#9da1b1"
 
 [colors.cursor]
-text = "#191724"
-cursor = "#e0def4"
+text = "#0f111a"
+cursor = "#ffcc00"
 
 [colors.selection]
-text = "#e0def4"
-background = "#403d52"
+text = "#8f93a2"
+background = "#1f2233"
 
 [colors.normal]
-black = "#26233a"
-red = "#eb6f92"
-green = "#31748f"
-yellow = "#f6c177"
-blue = "#9ccfd8"
-magenta = "#c4a7e7"
-cyan = "#ebbcba"
-white = "#e0def4"
+black = "#546e7a"
+red = "#ff5370"
+green = "#c3e88d"
+yellow = "#ffcb6b"
+blue = "#82aaff"
+magenta = "#c792ea"
+cyan = "#89ddff"
+white = "#ffffff"
 
 [colors.bright]
-black = "#26233a"
-red = "#eb6f92"
-green = "#31748f"
-yellow = "#f6c177"
-blue = "#9ccfd8"
-magenta = "#c4a7e7"
-cyan = "#ebbcba"
-white = "#e0def4"
+black = "#546e7a"
+red = "#ff5370"
+green = "#c3e88d"
+yellow = "#ffcb6b"
+blue = "#82aaff"
+magenta = "#c792ea"
+cyan = "#89ddff"
+white = "#ffffff"
 
 [colors.dim]
-black = "#201e31"
-red = "#c85e7c"
-green = "#2a637a"
-yellow = "#d1a465"
-blue = "#85b0b8"
-magenta = "#a78ec4"
-cyan = "#c8a09e"
-white = "#bebdcf"
+black = "#475e68"
+red = "#d9475f"
+green = "#a6c578"
+yellow = "#d9ad5b"
+blue = "#6f91d9"
+magenta = "#a97cc7"
+cyan = "#74bcd9"
+white = "#d9d9d9"
 
 [[colors.indexed_colors]]
 index = 16
-color = "#f19885"
+color = "#ff8f6e"
 
 [[colors.indexed_colors]]
 index = 17
-color = "#e6a7c3"
+color = "#ffa9b8"
 
 [font.normal]
 family = "CaskaydiaMono Nerd Font Mono"
