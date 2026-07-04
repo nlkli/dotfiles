@@ -251,75 +251,11 @@ if vim.fn.executable("fd") == 1 then
     vim.keymap.set("n", "<leader>f", ":Fd ")
 end
 if vim.fn.executable("recol") == 1 then
-    local launch_interactive_mode = function()
-        local width = math.floor(vim.o.columns * 0.75)
-        local height = math.floor(vim.o.lines * 0.75)
-        local buf = vim.api.nvim_create_buf(false, true)
-        local win = vim.api.nvim_open_win(buf, true, {
-            relative = "editor",
-            width = width,
-            height = height,
-            row = math.floor((vim.o.lines - height - 3) / 2),
-            col = math.floor((vim.o.columns - width) / 2),
-            border = "rounded",
-            title = " Recol ",
-            title_pos = "center",
-        })
-        vim.bo[buf].bufhidden = "wipe"
-        vim.fn.termopen({ "recol", "-i", "--quit-on-select" }, {
-            on_exit = function()
-                vim.schedule(function()
-                    if vim.api.nvim_win_is_valid(win) then
-                        vim.api.nvim_win_close(win, true)
-                    end
-                    vim.cmd.source("~/.config/nvim/init.lua")
-                end)
-            end,
-        })
-
-        vim.cmd.startinsert()
-    end
     vim.api.nvim_create_user_command("Recol", function(opts)
-        local args = vim.split(opts.args, "%s+", { trimempty = true })
-        local is_interactive_mode = vim.tbl_contains(args, "-i") or vim.tbl_contains(args, "--interactive")
-        if is_interactive_mode then
-            launch_interactive_mode()
-            return
-        end
         vim.cmd("!recol " .. opts.args)
-        vim.cmd.source("~/.config/nvim/init.lua")
+        vim.cmd("source ~/.config/nvim/init.lua")
     end, { nargs = "*" })
-
-    vim.api.nvim_create_user_command("RecolOpen", function()
-        launch_interactive_mode()
-    end, { nargs = 0 })
 end
-vim.keymap.set("n", "<leader>x", function()
-    local buf = vim.api.nvim_create_buf(false, true)
-
-    local win = vim.api.nvim_open_win(buf, true, {
-        relative = "editor",
-        width = 80,
-        height = 20,
-        row = 2,
-        col = 4,
-        border = "rounded",
-    })
-
-    vim.fn.termopen({ "recol", "-i" }, {
-        on_exit = function()
-            vim.schedule(function()
-                if vim.api.nvim_win_is_valid(win) then
-                    vim.api.nvim_win_close(win, true)
-                end
-
-                vim.cmd("source ~/.config/nvim/init.lua")
-            end)
-        end,
-    })
-
-    vim.cmd.startinsert()
-end)
 
 vim.api.nvim_create_user_command("PackAdd", function(opts)
     vim.pack.add(opts.fargs)
@@ -427,38 +363,42 @@ if #lspservers_ensure_installed > 0 then
     })
 end
 
--- recol:start
--- Rouge 2
-local function applyRecolTheme()
+-- [STARTRECOLMARK]
+
+-- London Soho Night
+
+local function applyRecol()
     vim.cmd("highlight clear")
     if vim.fn.has("syntax_on") then vim.cmd("syntax reset") end
+
     local P = {
-        black   = { "#5d5d6b", "#616274", "#757581" },
-        red     = { "#c6797e", "#c6797e", "#cf8d91" },
-        green   = { "#969e92", "#e6dcc4", "#a6ada2" },
-        yellow  = { "#dbcdab", "#e6dcc4", "#e0d5b8" },
-        blue    = { "#6e94b9", "#98b3cd", "#84a4c4" },
-        magenta = { "#4c4e78", "#8283a1", "#67698c" },
-        cyan    = { "#8ab6c1", "#abcbd3", "#9cc1ca" },
-        white   = { "#e8e8ea", "#e8e8ea", "#ebebed" },
-        orange  = { "#d1a395", "#d6aba1", "#d8b1a5" },
-        pink    = { "#d7b1b4", "#d7b1b4", "#ddbdbf" },
-        bg = { "#111220", "#17182b", "#1f213a", "#27294a", "#363966" },
-        fg = { "#b1b2b9", "#a2a3aa", "#6a6b6f", "#37373a" },
-        sel = { "#2c2d3e", "#2a2c3a" },
+        black   = { "#2a221a", "#6b5a48", "#4a433c" },
+        red     = { "#d4574a", "#e87765", "#da7065" },
+        green   = { "#8fae5e", "#aac874", "#a0ba76" },
+        yellow  = { "#e8b04a", "#f4c560", "#ebbc65" },
+        blue    = { "#6a8fb5", "#88a8c8", "#80a0c0" },
+        magenta = { "#d96aa5", "#ed85b8", "#df80b3" },
+        cyan    = { "#9ab8a8", "#b8cebd", "#a9c3b5" },
+        white   = { "#ebe0c8", "#f8eed2", "#eee5d0" },
+        orange  = { "#de844a", "#ee9e63", "#e39665" },
+        pink    = { "#e09c89", "#f0b39c", "#e5ab9b" },
+        bg = { "#0f0d0a", "#1a1612", "#29231d", "#393027", "#55483b" },
+        fg = { "#faefd5", "#ebe0c8", "#b0a896", "#7b7569" },
+        sel = { "#39342d", "#3c212a" },
         cur = { 
-            bg = "#969e92",
-            fg = "#ffffff",
+            bg = "#ff5db1",
+            fg = "#1a1612",
         },
-        comment = "#6a6b77",
-        status_line = "#111220",
+        comment = "#978f7f",
+        status_line = "#0f0d0a",
         diff = {
-            add = "#6c7270",
-            delete = "#8c5963",
-            change = "#516b8a",
-            text = "#373859",
+            add = "#687c45",
+            delete = "#974238",
+            change = "#50677f",
+            text = "#8d486a",
         }
     }
+
     local spec = {
         diag = {
             error = P.red[1],
@@ -742,5 +682,6 @@ local function applyRecolTheme()
         vim.api.nvim_set_hl(0, group, opts)
     end
 end
-applyRecolTheme()
--- recol:end
+applyRecol()
+
+-- [ENDRECOLMARK]

@@ -6,6 +6,7 @@ alias e='$EDITOR'
 alias c='clear'
 alias q='exit'
 alias ll='ls -lah --color=auto'
+alias python='python3.14'
 
 export PS1='%n@%m:%~$ '
 

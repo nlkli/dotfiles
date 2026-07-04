@@ -7,4 +7,5 @@
 
 [alias]
     acp = "!f() { git add -A && git commit -m \"$@\" && git push; }; f"
+    release = "!f() { git tag -fa \"$1\" -m \"Release $1\" && git push origin \"$1\" --force; }; f"
 

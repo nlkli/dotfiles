@@ -1,3 +1,9 @@
+# title = ""
+# macos-titlebar-style = transparent
+# macos-window-buttons = hidden
+# window-subtitle = false
+# window-decoration = auto
+confirm-close-surface = false
 custom-shader = shaders/cursor_tail.glsl
 custom-shader = shaders/ripple_cursor.glsl
 mouse-hide-while-typing = true
@@ -8,29 +14,29 @@ window-padding-balance = true
 cursor-style = block
 cursor-style-blink = false
 font-size = 16
-palette = 0=#14171d
-palette = 1=#c4746e
-palette = 2=#8a9a7b
-palette = 3=#c4b28a
-palette = 4=#8ba4b0
-palette = 5=#a292a3
-palette = 6=#8ea4a2
-palette = 7=#c8c093
-palette = 8=#14171d
-palette = 9=#c4746e
-palette = 10=#8a9a7b
-palette = 11=#c4b28a
-palette = 12=#8ba4b0
-palette = 13=#a292a3
-palette = 14=#8ea4a2
-palette = 15=#c8c093
-background = #14171d
-foreground = #c5c9c7
-cursor-color = #c5c9c7
-cursor-text = #14171d
-selection-background = #22262d
-selection-foreground = #c5c9c7
-font-family = CaskaydiaMono Nerd Font Mono
+palette = 0=#5d5d6b
+palette = 1=#c6797e
+palette = 2=#969e92
+palette = 3=#dbcdab
+palette = 4=#6e94b9
+palette = 5=#4c4e78
+palette = 6=#8ab6c1
+palette = 7=#e8e8ea
+palette = 8=#616274
+palette = 9=#c6797e
+palette = 10=#e6dcc4
+palette = 11=#e6dcc4
+palette = 12=#98b3cd
+palette = 13=#8283a1
+palette = 14=#abcbd3
+palette = 15=#e8e8ea
+background = #17182b
+foreground = #a2a3aa
+cursor-color = #969e92
+cursor-text = #ffffff
+selection-background = #5d5d6b
+selection-foreground = #dfe5ee
+font-family = ZedMono Nerd Font Mono
 font-style = Bold
-palette = 16=#c4937c
-palette = 17=#c69a81
+palette = 16=#d1a395
+palette = 17=#d7b1b4
