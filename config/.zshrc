@@ -10,7 +10,21 @@ alias ll='ls -lah --color=auto'
 alias python='python3.14'
 alias bat='bat --theme=ansi'
 
-export PS1='%n@%m:%~$ '
+autoload -Uz colors vcs_info
+colors
+setopt PROMPT_SUBST
+zstyle ':vcs_info:*' enable git
+zstyle ':vcs_info:*' check-for-changes true
+zstyle ':vcs_info:git:*' stagedstr '+'
+zstyle ':vcs_info:git:*' unstagedstr '*'
+zstyle ':vcs_info:git:*' formats ':%F{yellow}%b%c%u%f'
+precmd() {
+    vcs_info
+    local venv=""
+    [[ -n $VIRTUAL_ENV ]] && venv="%F{green}(${VIRTUAL_ENV:t})%f "
+    PROMPT="${venv}%F{green}%n@%m%f:%F{blue}%~%f${vcs_info_msg_0_}
+%(#.%F{red}.%F{cyan})>%f "
+}
 
 bindkey -v
 

@@ -27,8 +27,8 @@
                 return 1; \
             fi; \
         fi; \
-        git status && \
         git add -A && \
+        git status && \
         git commit -m \"$*\" && \
         git push -u origin HEAD; \
     }; f"
@@ -42,7 +42,14 @@
         git fetch origin && \
         git status && \
         git tag -a \"$1\" -m \"Release $1\" && \
-        git push origin \"$1\"; \
+        git push origin \"$1\" && \
+        git tag -n && \
+        git show \"$1\" --format=fuller --stat; \
+    }; f"
+    acp-release = "!f() { \
+        [ $# -eq 2 ] || { echo 'Usage: git acp-release <message> <tag>'; return 1; }; \
+        git acp \"$1\" && \
+        git release \"$2\"; \
     }; f"
     frelease = "!f() { \
         [ $# -eq 1 ] || { echo 'Usage: git frelease <tag>'; return 1; }; \
@@ -54,7 +61,9 @@
         git fetch origin && \
         git status && \
         git tag -fa \"$1\" -m \"Release $1\" && \
-        git push origin \"$1\" --force; \
+        git push origin \"$1\" --force && \
+        git tag -n && \
+        git show \"$1\" --format=fuller --stat; \
     }; f"
     rmt = "!f() { \
         if [ $# -eq 0 ]; then \
