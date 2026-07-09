@@ -6,6 +6,87 @@
     defaultBranch = main
 
 [alias]
-    acp = "!f() { git add -A && git commit -m \"$@\" && git push; }; f"
-    release = "!f() { git tag -fa \"$1\" -m \"Release $1\" && git push origin \"$1\" --force; }; f"
+    acp = "!f() { \
+        [ $# -gt 0 ] || { echo 'Usage: git acp <message>'; return 1; }; \
+        if ! git remote get-url origin >/dev/null 2>&1; then \
+            echo \"Remote 'origin' is not configured.\"; \
+            echo \"Run: git remote add origin <url>\"; \
+            return 1; \
+        fi; \
+        git fetch origin || return 1; \
+        if git rev-parse --abbrev-ref @{u} >/dev/null 2>&1; then \
+            ahead=$(git rev-list --count @{u}..HEAD); \
+            behind=$(git rev-list --count HEAD..@{u}); \
+            if [ \"$behind\" -gt 0 ] && [ \"$ahead\" -gt 0 ]; then \
+                echo \"Branch has diverged: $ahead ahead, $behind behind.\"; \
+                echo \"Run: git pull --rebase\"; \
+                return 1; \
+            elif [ \"$behind\" -gt 0 ]; then \
+                echo \"Your branch is behind remote by $behind commit(s).\"; \
+                echo \"Run: git pull --rebase\"; \
+                return 1; \
+            fi; \
+        fi; \
+        git status && \
+        git add -A && \
+        git commit -m \"$*\" && \
+        git push -u origin HEAD; \
+    }; f"
+    release = "!f() { \
+        [ $# -eq 1 ] || { echo 'Usage: git release <tag>'; return 1; }; \
+        git remote get-url origin >/dev/null 2>&1 || { \
+            echo \"Remote 'origin' is not configured.\"; \
+            echo \"Run: git remote add origin <url>\"; \
+            return 1; \
+        }; \
+        git fetch origin && \
+        git status && \
+        git tag -a \"$1\" -m \"Release $1\" && \
+        git push origin \"$1\"; \
+    }; f"
+    frelease = "!f() { \
+        [ $# -eq 1 ] || { echo 'Usage: git frelease <tag>'; return 1; }; \
+        git remote get-url origin >/dev/null 2>&1 || { \
+            echo \"Remote 'origin' is not configured.\"; \
+            echo \"Run: git remote add origin <url>\"; \
+            return 1; \
+        }; \
+        git fetch origin && \
+        git status && \
+        git tag -fa \"$1\" -m \"Release $1\" && \
+        git push origin \"$1\" --force; \
+    }; f"
+    rmt = "!f() { \
+        if [ $# -eq 0 ]; then \
+            git remote get-url origin 2>/dev/null || { \
+                echo \"Remote 'origin' is not configured.\"; \
+                return 1; \
+            }; \
+        elif [ $# -eq 1 ]; then \
+            if git remote get-url origin >/dev/null 2>&1; then \
+                git remote set-url origin \"$1\" && \
+                git fetch origin && \
+                echo \"Remote origin updated: $1\"; \
+            else \
+                git remote add origin \"$1\" && \
+                git fetch origin && \
+                echo \"Remote origin added: $1\"; \
+            fi; \
+        else \
+            echo 'Usage: git rmt [url]'; \
+            return 1; \
+        fi; \
+    }; f"
+    pr = "pull --rebase"
+    logg = "log --graph --all --decorate --oneline --pretty=format:'%C(yellow)%h%C(reset) %C(cyan)%an%C(reset) %C(green)(%ar)%C(reset) %s'"
+    help-alias = "!f() { \
+        echo 'Git aliases:'; \
+        echo; \
+        echo 'acp <message>     add + commit + push (checks remote & divergence)'; \
+        echo 'release <tag>     create and push a release tag'; \
+        echo 'frelease <tag>    force recreate tag (asks confirmation if exists)'; \
+        echo 'rmt [url]         add/update/show remote origin'; \
+        echo 'pr                pull --rebase'; \
+        echo 'logg              graph log with author + relative date'; \
+    }; f"
 

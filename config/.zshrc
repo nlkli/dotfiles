@@ -1,12 +1,14 @@
 export PATH=$HOME/bin:$HOME/.local/bin:/usr/local/bin:$PATH
 export TERM=xterm-256color
 export EDITOR=nvim
+export XDG_CONFIG_HOME=$HOME/.config
 
 alias e='$EDITOR'
 alias c='clear'
 alias q='exit'
 alias ll='ls -lah --color=auto'
 alias python='python3.14'
+alias bat='bat --theme=ansi'
 
 export PS1='%n@%m:%~$ '
 
