@@ -14,7 +14,7 @@ window-padding-balance = true
 cursor-style = block
 cursor-style-blink = false
 font-size = 18
-font-family = IosevkaTerm Nerd Font Mono
+font-family = ZedMono Nerd Font Mono
 font-style = Bold
 palette = 0=#1c2533
 palette = 1=#c5573f

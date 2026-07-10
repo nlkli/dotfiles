@@ -51,7 +51,7 @@ index = 17
 color = "#d7a399"
 
 [font.normal]
-family = "IosevkaTerm Nerd Font Mono"
+family = "ZedMono Nerd Font Mono"
 
 [cursor.style]
 shape = "Block"
