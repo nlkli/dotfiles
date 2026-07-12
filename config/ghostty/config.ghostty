@@ -13,7 +13,7 @@ window-padding-y = 6
 window-padding-balance = true
 cursor-style = block
 cursor-style-blink = false
-font-size = 18
+font-size = 22
 font-family = ZedMono Nerd Font Mono
 font-style = Bold
 palette = 0=#1c2533
