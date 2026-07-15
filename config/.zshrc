@@ -16,6 +16,12 @@ export LESS="-R -F -X"
 export PAGER="less"
 export COLORTERM="truecolor"
 export MANPAGER="nvim +Man!"
+export PRIVATE_GLOG_ENV_FILE="$HOME/.private-glob.env"
+if [ -f "$PRIVATE_GLOG_ENV_FILE" ]; then
+    set -a
+    source "$PRIVATE_GLOG_ENV_FILE"
+    set +a
+fi
 
 # --------------------------------------------------
 # Aliases
@@ -26,7 +32,7 @@ alias c="clear"
 alias q="exit"
 alias ls="ls --color=auto"
 alias ll="ls -lah"
-alias bat="bat --theme=ansi"
+alias bat="bat --theme=ansi -p"
 if command -v python3.14 >/dev/null 2>&1; then
     alias python="python3.14"
 fi
@@ -180,6 +186,63 @@ fi
 
 function imgview() {
     ffplay -loglevel quiet -noborder -infbuf -loop 0 "$@"
+}
+
+myip() {
+    local out
+
+    local curl_args=(
+        curl
+        -fsSL
+        --max-time 5
+        --retry 2
+    )
+
+    # 1. api.myip.com
+    out=$(
+        "${curl_args[@]}" https://api.myip.com 2>/dev/null |
+        jq -er '"\(.ip)\n\(.country), \(.cc)"'
+    ) && {
+        printf '%s\n' "$out"
+        return 0
+    }
+
+    # 2. ipwho.is
+    out=$(
+        "${curl_args[@]}" https://ipwho.is/ 2>/dev/null |
+        jq -er 'select(.success == true) |
+                "\(.ip)\n\(.country), \(.country_code)"'
+    ) && {
+        printf '%s\n' "$out"
+        return 0
+    }
+
+    # 3. ipapi.co
+    out=$(
+        "${curl_args[@]}" https://ipapi.co/json/ 2>/dev/null |
+        jq -er '"\(.ip)\n\(.country_name), \(.country_code)"'
+    ) && {
+        printf '%s\n' "$out"
+        return 0
+    }
+
+    echo "Error: failed to retrieve IP information from all sources." >&2
+    return 1
+}
+
+rpass() {
+    local num="${1:-1}"
+    local len="${2:-32}"
+
+    local curl_args=(
+        curl
+        -fsSL
+        --max-time 5
+        --retry 2
+    )
+
+    "${curl_args[@]}" \
+        "https://www.random.org/passwords/?num=${num}&len=${len}&format=plain&rnd=new"
 }
 
 function y() {
