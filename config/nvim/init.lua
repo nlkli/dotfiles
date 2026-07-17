@@ -426,35 +426,35 @@ if #lspservers_ensure_installed > 0 then
 end
 
 -- recol:start
--- London Columbia Road
+-- Duckbones
 local function applyRecolTheme()
     vim.cmd("highlight clear")
     if vim.fn.has("syntax_on") then vim.cmd("syntax reset") end
     local P = {
-        black   = { "#2a2520", "#756a55", "#4a4641" },
-        red     = { "#c14a4a", "#d96a6a", "#ca6565" },
-        green   = { "#5a8a3a", "#6ea050", "#739c58" },
-        yellow  = { "#d4a82c", "#d8af33", "#dab54c" },
-        blue    = { "#3a7a8a", "#5598ab", "#588e9c" },
-        magenta = { "#c45f8a", "#d97aa3", "#cd779c" },
-        cyan    = { "#5fa89a", "#7ac0b0", "#77b5a9" },
-        white   = { "#1f3a2f", "#142217", "#41584e" },
-        orange  = { "#cb793b", "#d98d4f", "#d38d58" },
-        pink    = { "#70423d", "#774641", "#855e5a" },
-        bg = { "#fffcf3", "#f8f5ec", "#fffcf3", "#fffcf3", "#fffcf3" },
-        fg = { "#172b23", "#1f3a2f", "#000000", "#000000" },
-        sel = { "#d7d9d0", "#f3e1de" },
+        black   = { "#0e101a", "#444860", "#32343c" },
+        red     = { "#e03600", "#ff4821", "#e55426" },
+        green   = { "#5dcd97", "#58db9e", "#75d5a7" },
+        yellow  = { "#e39500", "#f6a100", "#e7a526" },
+        blue    = { "#00a3cb", "#00b4e0", "#26b1d3" },
+        magenta = { "#795ccc", "#b3a1e6", "#8d74d4" },
+        cyan    = { "#00a3cb", "#00b4e0", "#26b1d3" },
+        white   = { "#ebefc0", "#b3b692", "#eef1c9" },
+        orange  = { "#e26600", "#fb7511", "#e67d26" },
+        pink    = { "#e69360", "#d97f5a", "#eaa378" },
+        bg = { "#08090f", "#0e101a", "#161929", "#1e2339", "#2e3455" },
+        fg = { "#fafecc", "#ebefc0", "#b1b491", "#7d7f66" },
+        sel = { "#2f3133", "#2f3233" },
         cur = { 
-            bg = "#d4708e",
-            fg = "#f8f5ec",
+            bg = "#edf2c2",
+            fg = "#0e101a",
         },
-        comment = "#76857b",
-        status_line = "#fffcf3",
+        comment = "#93967e",
+        status_line = "#08090f",
         diff = {
-            add = "#8ead75",
-            delete = "#d3827f",
-            change = "#79a3aa",
-            text = "#d99bb1",
+            add = "#438f6e",
+            delete = "#9b2909",
+            change = "#057291",
+            text = "#4e3e85",
         }
     }
     local spec = {
@@ -476,21 +476,21 @@ local function applyRecolTheme()
     local syn = {
         bracket     = P.fg[3],
         builtin0    = P.red[1],
-        builtin1    = P.cyan[3],
-        builtin2    = P.orange[3],
-        builtin3    = P.red[3],
+        builtin1    = P.cyan[2],
+        builtin2    = P.orange[2],
+        builtin3    = P.red[2],
         comment     = P.comment,
-        conditional = P.magenta[3],
-        const       = P.orange[3],
+        conditional = P.magenta[2],
+        const       = P.orange[2],
         dep         = P.fg[4],
         field       = P.blue[1],
-        func        = P.blue[3],
+        func        = P.blue[2],
         ident       = P.cyan[1],
         keyword     = P.magenta[1],
         number      = P.orange[1],
         operator    = P.fg[3],
-        preproc     = P.pink[3],
-        regex       = P.yellow[3],
+        preproc     = P.pink[2],
+        regex       = P.yellow[2],
         statement   = P.magenta[1],
         string      = P.green[1],
         type        = P.yellow[1],
