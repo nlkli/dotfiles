@@ -1,0 +1,99 @@
+#!/usr/bin/env bash
+
+set -e
+
+IN_CONFIG_DIR="./config"
+
+OUT_NVIM="$HOME/.config/nvim"
+OUT_ALACRITY="$HOME/.config/alacritty"
+OUT_GHOSTTY="$HOME/.config/ghostty"
+OUT_YAZI="$HOME/.config/yazi"
+
+IN_NVIM="$IN_CONFIG_DIR/nvim"
+IN_ALACRITY="$IN_CONFIG_DIR/alacritty"
+IN_GHOSTTY="$IN_CONFIG_DIR/ghostty"
+IN_YAZI="$IN_CONFIG_DIR/yazi"
+
+OUT_VIMRC="$HOME/.vimrc"
+OUT_GITCONFIG="$HOME/.gitconfig"
+OUT_ZSHRC="$HOME/.zshrc"
+OUT_BASHRC="$HOME/.bashrc"
+OUT_TMUX="$HOME/.tmux.conf"
+
+IN_VIMRC="$IN_CONFIG_DIR/.vimrc"
+IN_GITCONFIG="$IN_CONFIG_DIR/.gitconfig"
+IN_ZSHRC="$IN_CONFIG_DIR/.zshrc"
+IN_BASHRC="$IN_CONFIG_DIR/.bashrc"
+IN_TMUX="$IN_CONFIG_DIR/.tmux.conf"
+
+MODE="${1:-}"
+
+if [[ "$MODE" != "in" && "$MODE" != "out" ]]; then
+    echo "Usage: $0 {in|out}"
+    exit 1
+fi
+
+if [[ "$MODE" == "out" ]]; then
+    read -r -p "Sync configs from home to repository? [y/N] " answer
+    if [[ "$answer" != "y" && "$answer" != "Y" ]]; then
+        echo "Cancelled"
+        exit 0
+    fi
+fi
+
+log() {
+    printf "%-20s %s\n" "$1" "$2"
+}
+
+_sync() {
+    local src="$1"
+    local dst="$2"
+    local name
+
+    name=$(basename "$src")
+
+    if [[ ! -e "$src" ]]; then
+        log "$name" "[missing source]"
+        return
+    fi
+
+    if [[ -d "$src" ]]; then
+        mkdir -p "$dst"
+    else
+        mkdir -p "$(dirname "$dst")"
+    fi
+
+    if diff -rq "$src" "$dst" >/dev/null 2>&1; then
+        log "$name" "[up-to-date]"
+    else
+        if [[ -d "$src" ]]; then
+            cp -R "$src/." "$dst"
+        else
+            cp -f "$src" "$dst"
+        fi
+
+        log "$name" "[updated]"
+    fi
+}
+
+sync() {
+    local out="$1"
+    local in="$2"
+
+    if [[ "$MODE" == "in" ]]; then
+        _sync "$out" "$in"
+    else
+        _sync "$in" "$out"
+    fi
+}
+
+sync "$OUT_NVIM"      "$IN_NVIM"
+sync "$OUT_ALACRITY"  "$IN_ALACRITY"
+sync "$OUT_GHOSTTY"   "$IN_GHOSTTY"
+sync "$OUT_YAZI"      "$IN_YAZI"
+
+sync "$OUT_VIMRC"     "$IN_VIMRC"
+sync "$OUT_GITCONFIG" "$IN_GITCONFIG"
+sync "$OUT_ZSHRC"     "$IN_ZSHRC"
+sync "$OUT_BASHRC"    "$IN_BASHRC"
+sync "$OUT_TMUX"      "$IN_TMUX"

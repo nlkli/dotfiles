@@ -211,6 +211,17 @@ sysinfo() {
     # myip | awk '{printf "%s%s", sep, $0; sep="; "} END {printf "\n"}'
 }
 
+y() {
+    local tmp="$(mktemp -t "yazi-cwd.XXXXXX")"
+    local cwd
+    command yazi "$@" --cwd-file="$tmp"
+    IFS= read -r -d '' cwd < "$tmp"
+    if [[ "$cwd" != "$PWD" && -d "$cwd" ]]; then
+        builtin cd -- "$cwd"
+    fi
+    command rm -f -- "$tmp"
+}
+
 rpass() {
     local num="${1:-1}"
     local len="${2:-32}"
@@ -226,15 +237,46 @@ rpass() {
         "https://www.random.org/passwords/?num=${num}&len=${len}&format=plain&rnd=new"
 }
 
-y() {
-    local tmp="$(mktemp -t "yazi-cwd.XXXXXX")"
-    local cwd
-    command yazi "$@" --cwd-file="$tmp"
-    IFS= read -r -d '' cwd < "$tmp"
-    if [[ "$cwd" != "$PWD" && -d "$cwd" ]]; then
-        builtin cd -- "$cwd"
+ts() {
+    local project_dir="${1:-$PWD}"
+    local session_name pane_left
+
+    project_dir=$(realpath "$project_dir" 2>/dev/null)
+    if [[ -z "$project_dir" || ! -d "$project_dir" ]]; then
+        echo "devts: not a directory '$1'" >&2
+        return 1
     fi
-    command rm -f -- "$tmp"
+
+    session_name=$(basename "$project_dir" | tr '.: ' '_')
+
+    if tmux has-session -t "$session_name" 2>/dev/null; then
+        if [[ -n "$TMUX" ]]; then
+            tmux switch-client -t "$session_name"
+        else
+            tmux attach -t "$session_name"
+        fi
+        return
+    fi
+
+    tmux new-session -d -s "$session_name" -n editor -c "$project_dir"
+
+    # capture original pane id before split (this is the left pane)
+    pane_left=$(tmux display-message -p -t "${session_name}:editor" '#{pane_id}')
+
+    tmux send-keys -t "$pane_left" "$EDITOR ." C-m
+    tmux split-window -h -t "${session_name}:editor" -p 37 -c "$project_dir"
+    tmux send-keys -t "${session_name}:editor" "ls -lah" C-m
+
+    tmux new-window -t "$session_name" -n shell -c "$project_dir"
+
+    tmux select-window -t "${session_name}:editor"
+    tmux select-pane -t "$pane_left"
+
+    if [[ -n "$TMUX" ]]; then
+        tmux switch-client -t "$session_name"
+    else
+        tmux attach -t "$session_name"
+    fi
 }
 
 export LS_COLORS="di=01;34:ln=01;36:mh=00:pi=40;33:so=01;35:do=01;35:bd=40;33;01:cd=40;33;01:or=40;31;01:mi=00:ex=01;32:*.tar=01;31:*.tgz=01;31:*.gz=01;31:*.bz2=01;31:*.xz=01;31:*.zst=01;31:*.zip=01;31:*.rar=01;31:*.7z=01;31:*.iso=01;31:*.jpg=01;35:*.jpeg=01;35:*.png=01;35:*.gif=01;35:*.webp=01;35:*.svg=01;35:*.ico=01;35:*.mp3=00;36:*.flac=00;36:*.wav=00;36:*.m4a=00;36:*.mp4=00;36:*.mkv=00;36:*.webm=00;36:*.pdf=01;33:*.doc=01;33:*.docx=01;33:*.odt=01;33:*.xls=01;33:*.xlsx=01;33:*.ppt=01;33:*.pptx=01;33:*.md=01;33:*.txt=01;33:*.c=01;32:*.h=01;32:*.cpp=01;32:*.hpp=01;32:*.rs=01;32:*.go=01;32:*.py=01;32:*.js=01;32:*.ts=01;32:*.java=01;32:*.kt=01;32:*.sh=01;32:*.zsh=01;32:*.html=01;32:*.css=01;32:*.conf=00;33:*.cfg=00;33:*.ini=00;33:*.toml=00;33:*.yaml=00;33:*.yml=00;33:*.json=00;33:*.xml=00;33:*.sql=00;36:*.db=00;36:*.sqlite=00;36:*.tmp=00;90:*.temp=00;90:*.bak=00;90:*.old=00;90:*.log=00;90"
