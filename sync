@@ -1,30 +1,44 @@
 #!/usr/bin/env bash
 
+# Sync personal configuration files between the local system and repository.
+#
+# Usage:
+#   ./sync in   # Apply repository configs to the system
+#   ./sync out  # Save system configs to repository
+
 set -e
 
-IN_CONFIG_DIR="./config"
+# Repository config directory
+CONFIG_DIR="./config"
 
-OUT_NVIM="$HOME/.config/nvim"
-OUT_ALACRITY="$HOME/.config/alacritty"
-OUT_GHOSTTY="$HOME/.config/ghostty"
-OUT_YAZI="$HOME/.config/yazi"
+# Use XDG config path if available, otherwise fallback to ~/.config
+CONFIG_HOME="${XDG_CONFIG_HOME:-$HOME/.config}"
 
-IN_NVIM="$IN_CONFIG_DIR/nvim"
-IN_ALACRITY="$IN_CONFIG_DIR/alacritty"
-IN_GHOSTTY="$IN_CONFIG_DIR/ghostty"
-IN_YAZI="$IN_CONFIG_DIR/yazi"
+# Directory configs
+NVIM_DIR="$CONFIG_HOME/nvim"
+ALACRITTY_DIR="$CONFIG_HOME/alacritty"
+GHOSTTY_DIR="$CONFIG_HOME/ghostty"
+YAZI_DIR="$CONFIG_HOME/yazi"
 
-OUT_VIMRC="$HOME/.vimrc"
-OUT_GITCONFIG="$HOME/.gitconfig"
-OUT_ZSHRC="$HOME/.zshrc"
-OUT_BASHRC="$HOME/.bashrc"
-OUT_TMUX="$HOME/.tmux.conf"
+# Repository directory configs
+NVIM_REPO="$CONFIG_DIR/nvim"
+ALACRITTY_REPO="$CONFIG_DIR/alacritty"
+GHOSTTY_REPO="$CONFIG_DIR/ghostty"
+YAZI_REPO="$CONFIG_DIR/yazi"
 
-IN_VIMRC="$IN_CONFIG_DIR/.vimrc"
-IN_GITCONFIG="$IN_CONFIG_DIR/.gitconfig"
-IN_ZSHRC="$IN_CONFIG_DIR/.zshrc"
-IN_BASHRC="$IN_CONFIG_DIR/.bashrc"
-IN_TMUX="$IN_CONFIG_DIR/.tmux.conf"
+# File configs
+VIMRC_FILE="$HOME/.vimrc"
+GITCONFIG_FILE="$HOME/.gitconfig"
+ZSHRC_FILE="$HOME/.zshrc"
+BASHRC_FILE="$HOME/.bashrc"
+TMUX_FILE="$HOME/.tmux.conf"
+
+# Repository file configs
+VIMRC_REPO="$CONFIG_DIR/.vimrc"
+GITCONFIG_REPO="$CONFIG_DIR/.gitconfig"
+ZSHRC_REPO="$CONFIG_DIR/.zshrc"
+BASHRC_REPO="$CONFIG_DIR/.bashrc"
+TMUX_REPO="$CONFIG_DIR/.tmux.conf"
 
 MODE="${1:-}"
 
@@ -33,8 +47,9 @@ if [[ "$MODE" != "in" && "$MODE" != "out" ]]; then
     exit 1
 fi
 
+# Prevent accidental overwrite of repository configs
 if [[ "$MODE" == "out" ]]; then
-    read -r -p "Sync configs from home to repository? [y/N] " answer
+    read -r -p "Sync configs from system to repository? [y/N] " answer
     if [[ "$answer" != "y" && "$answer" != "Y" ]]; then
         echo "Cancelled"
         exit 0
@@ -45,6 +60,7 @@ log() {
     printf "%-20s %s\n" "$1" "$2"
 }
 
+# Sync a single file or directory
 _sync() {
     local src="$1"
     local dst="$2"
@@ -53,10 +69,11 @@ _sync() {
     name=$(basename "$src")
 
     if [[ ! -e "$src" ]]; then
-        log "$name" "[missing source]"
+        log "$name" "[missing]"
         return
     fi
 
+    # Create destination parent directory if needed
     if [[ -d "$src" ]]; then
         mkdir -p "$dst"
     else
@@ -64,36 +81,38 @@ _sync() {
     fi
 
     if diff -rq "$src" "$dst" >/dev/null 2>&1; then
-        log "$name" "[up-to-date]"
-    else
-        if [[ -d "$src" ]]; then
-            cp -R "$src/." "$dst"
-        else
-            cp -f "$src" "$dst"
-        fi
-
-        log "$name" "[updated]"
+        log "$name" "[unchanged]"
+        return
     fi
+
+    if [[ -d "$src" ]]; then
+        cp -R "$src/." "$dst"
+    else
+        cp -f "$src" "$dst"
+    fi
+
+    log "$name" "[updated]"
 }
 
+# Sync direction wrapper
 sync() {
-    local out="$1"
-    local in="$2"
+    local system="$1"
+    local repo="$2"
 
     if [[ "$MODE" == "in" ]]; then
-        _sync "$out" "$in"
+        _sync "$repo" "$system"
     else
-        _sync "$in" "$out"
+        _sync "$system" "$repo"
     fi
 }
 
-sync "$OUT_NVIM"      "$IN_NVIM"
-sync "$OUT_ALACRITY"  "$IN_ALACRITY"
-sync "$OUT_GHOSTTY"   "$IN_GHOSTTY"
-sync "$OUT_YAZI"      "$IN_YAZI"
+sync "$NVIM_DIR"      "$NVIM_REPO"
+sync "$ALACRITTY_DIR" "$ALACRITTY_REPO"
+sync "$GHOSTTY_DIR"   "$GHOSTTY_REPO"
+sync "$YAZI_DIR"      "$YAZI_REPO"
 
-sync "$OUT_VIMRC"     "$IN_VIMRC"
-sync "$OUT_GITCONFIG" "$IN_GITCONFIG"
-sync "$OUT_ZSHRC"     "$IN_ZSHRC"
-sync "$OUT_BASHRC"    "$IN_BASHRC"
-sync "$OUT_TMUX"      "$IN_TMUX"
+sync "$VIMRC_FILE"     "$VIMRC_REPO"
+sync "$GITCONFIG_FILE" "$GITCONFIG_REPO"
+sync "$ZSHRC_FILE"     "$ZSHRC_REPO"
+sync "$BASHRC_FILE"    "$BASHRC_REPO"
+sync "$TMUX_FILE"      "$TMUX_REPO"
