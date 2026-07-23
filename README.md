@@ -5,10 +5,10 @@ Personal configuration files managed with a simple sync script.
 ## Usage
 
 ```bash
-# Apply configs from repo to system
+# Save system configs to repo
 ./sync in
 
-# Save system configs to repo
+# Apply configs from repo to system
 ./sync out
 ```
 

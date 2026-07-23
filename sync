@@ -3,8 +3,8 @@
 # Sync personal configuration files between the local system and repository.
 #
 # Usage:
-#   ./sync in   # Apply repository configs to the system
-#   ./sync out  # Save system configs to repository
+#   ./sync in   # Save system configs to repository
+#   ./sync out  # Apply repository configs to the system
 
 set -e
 
