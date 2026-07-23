@@ -27,7 +27,7 @@ GHOSTTY_REPO="$CONFIG_DIR/ghostty"
 YAZI_REPO="$CONFIG_DIR/yazi"
 
 # File configs
-VIMRC_FILE="$HOME/.vimrc"
+VIMRC_FILE="$HOME/.vim/.vimrc"
 GITCONFIG_FILE="$HOME/.gitconfig"
 ZSHRC_FILE="$HOME/.zshrc"
 BASHRC_FILE="$HOME/.bashrc"
@@ -100,9 +100,9 @@ sync() {
     local repo="$2"
 
     if [[ "$MODE" == "in" ]]; then
-        _sync "$repo" "$system"
-    else
         _sync "$system" "$repo"
+    else
+        _sync "$repo" "$system"
     fi
 }
 
@@ -116,3 +116,5 @@ sync "$GITCONFIG_FILE" "$GITCONFIG_REPO"
 sync "$ZSHRC_FILE"     "$ZSHRC_REPO"
 sync "$BASHRC_FILE"    "$BASHRC_REPO"
 sync "$TMUX_FILE"      "$TMUX_REPO"
+
+rm -f ./config/nvim/nvim-pack-lock.json

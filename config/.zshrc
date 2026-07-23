@@ -11,8 +11,8 @@ export HOMEBREW_NO_ANALYTICS=1
 export LESS="-R -F -X"
 export PAGER="less"
 export COLORTERM="truecolor"
-export MANPAGER="nvim +Man!"
-export PRIVATE_GLOG_ENV_FILE="$HOME/.private-glob.env"
+export MANPAGER="$EDITOR +Man!"
+export PRIVATE_GLOG_ENV_FILE="$HOME/.private_glob.env"
 if [ -f "$PRIVATE_GLOG_ENV_FILE" ]; then
     set -a
     source "$PRIVATE_GLOG_ENV_FILE"
@@ -84,19 +84,6 @@ KEYTIMEOUT=1
 
 bindkey '^r' history-incremental-search-backward
 bindkey '^y' copy-prompt-line-to-clipboard
-# bindkey '^p' up-line-or-history
-# bindkey '^n' down-line-or-history
-
-# function zle-keymap-select() {
-#     if [[ "$KEYMAP" == vicmd ]]; then
-#         RPS1="%F{red}N%f"
-#     else
-#         RPS1="%F{green}I%f"
-#     fi
-#     zle reset-prompt
-# }
-#
-# zle -N zle-keymap-select
 
 bindkey -M viins '^?' backward-delete-char
 
@@ -152,6 +139,17 @@ imgview() {
     ffplay -loglevel quiet -noborder -infbuf -loop 0 "$@"
 }
 
+y() {
+    local tmp="$(mktemp -t "yazi-cwd.XXXXXX")"
+    local cwd
+    command yazi "$@" --cwd-file="$tmp"
+    IFS= read -r -d '' cwd < "$tmp"
+    if [[ "$cwd" != "$PWD" && -d "$cwd" ]]; then
+        builtin cd -- "$cwd"
+    fi
+    command rm -f -- "$tmp"
+}
+
 myip() {
     local out
 
@@ -162,7 +160,6 @@ myip() {
         --retry 1
     )
 
-    # 1. api.myip.com
     out=$(
         "${curl_args[@]}" https://api.myip.com 2>/dev/null |
         jq -er '"\(.ip)\n\(.country), \(.cc)"'
@@ -171,7 +168,6 @@ myip() {
         return 0
     }
 
-    # 2. ipwho.is
     out=$(
         "${curl_args[@]}" https://ipwho.is/ 2>/dev/null |
         jq -er 'select(.success == true) |
@@ -181,7 +177,6 @@ myip() {
         return 0
     }
 
-    # 3. ipapi.co
     out=$(
         "${curl_args[@]}" https://ipapi.co/json/ 2>/dev/null |
         jq -er '"\(.ip)\n\(.country_name), \(.country_code)"'
@@ -209,17 +204,6 @@ sysinfo() {
 
     printf "%s\n%s\n" "$info" "$(uptime)"
     # myip | awk '{printf "%s%s", sep, $0; sep="; "} END {printf "\n"}'
-}
-
-y() {
-    local tmp="$(mktemp -t "yazi-cwd.XXXXXX")"
-    local cwd
-    command yazi "$@" --cwd-file="$tmp"
-    IFS= read -r -d '' cwd < "$tmp"
-    if [[ "$cwd" != "$PWD" && -d "$cwd" ]]; then
-        builtin cd -- "$cwd"
-    fi
-    command rm -f -- "$tmp"
 }
 
 rpass() {
