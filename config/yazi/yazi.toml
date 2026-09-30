@@ -1,21 +1,21 @@
 [mgr]
 show_hidden = true
-ratio = [1, 2, 3]
+ratio = [2, 3, 4]
 linemode = "size"
 sort_by = "natural"
 [opener]
 edit = [
-    { run = '${EDITOR:-nvim} "$@"', desc = "editor", block = true },
+    { run = '${EDITOR:-nvim} %s', desc = "editor", block = true },
 ]
 open = [
-    { run = 'xdg-open "$1"', desc = "open", for = "linux" },
-    { run = 'open "$@"', desc = "open", for = "macos" },
+    { run = 'xdg-open %s', desc = "open", for = "linux" },
+    { run = 'open %s', desc = "open", for = "macos" },
 ]
 extract = [
-	{ run = 'ya pub extract --list "$@"', desc = "Extract here", for = "unix" },
+	{ run = 'ya pub extract --list %s', desc = "Extract here", for = "unix" },
 ]
 media = [
-    { run = 'ffplay -loglevel quiet -noborder -infbuf -loop 0 "$@"', desc = "open image", for = "unix" }
+    { run = 'ffplay -loglevel quiet -noborder -infbuf -loop 0 %s', desc = "open image", for = "unix" }
 ]
 [open]
 rules = [
@@ -26,3 +26,6 @@ rules = [
     { mime = "inode/empty", use = "edit" },
 	{ mime = "*", use = [ "edit", "open" ] },
 ]
+[preview]
+max_width = 1200
+max_height = 1800

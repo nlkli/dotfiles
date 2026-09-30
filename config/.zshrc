@@ -1,4 +1,4 @@
-export PATH="$HOME/.cargo/bin:$HOME/bin:$HOME/.local/bin:/usr/local/bin:$PATH"
+export PATH="/opt/homebrew/bin:$HOME/.cargo/bin:$HOME/bin:$HOME/.local/bin:/usr/local/bin:$PATH"
 typeset -U PATH
 export TERM="xterm-256color"
 export EDITOR="nvim"
@@ -25,7 +25,7 @@ export LLAMA_MODELS_DIR=$HOME/.local/llama.cpp.models
 export LLAMA_SERVER_PORT=8888
 export LLAMA_BASE_URL=http://127.0.0.1:$LLAMA_SERVER_PORT
 export LLAMA_API_KEY=
-export LLAMA_CTX_SIZE=22000
+export LLAMA_CTX_SIZE=25000
 
 run-llama-server() {
     llama-server \
