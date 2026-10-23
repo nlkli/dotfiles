@@ -404,6 +404,7 @@ require("oil").setup({
 local treesitter_parsers = {
     "bash",
     "c",
+    "c3",
     "csv",
     "go",
     "html",
@@ -449,6 +450,7 @@ local lspservers_ensure_installed = {
     "jsonls",
     "clangd",
     "sqlls",
+    -- "c3_lsp",
 }
 
 if #lspservers_ensure_installed > 0 then
@@ -487,37 +489,60 @@ if #lspservers_ensure_installed > 0 then
     })
 end
 
+if vim.fn.executable("c3_ls") == 1 then
+    vim.filetype.add({
+        extension = {
+            c3 = "c3",
+            c3i = "c3",
+            c3t = "c3",
+        },
+    })
+    vim.api.nvim_create_autocmd("FileType", {
+        pattern = "c3",
+        callback = function(args)
+            vim.lsp.start({
+                name = "c3_ls",
+                cmd = { "c3_ls", "--stdlib-path", "/opt/homebrew/Cellar/c3c/0.8.4/lib/c3/std" },
+                -- cmd = { "c3_ls" },
+                root_dir = vim.fs.root(args.buf, { "project.json", ".git" }) or vim.fn.getcwd(),
+                on_attach = function(_, bufnr)
+                    vim.bo[bufnr].omnifunc = "v:lua.vim.lsp.omnifunc"
+                end,
+            }, { bufnr = args.buf })
+        end,
+    })
+end
 
 -- recol:start
--- Golden Retriever Red
+-- Kanso Zen
 local function applyRecolTheme()
     vim.cmd("highlight clear")
     if vim.fn.has("syntax_on") then vim.cmd("syntax reset") end
     local P = {
-        black   = { "#8b3a1b", "#8c5a3c" },
-        red     = { "#d3542c", "#e67356" },
-        green   = { "#7a9b45", "#9bba5d" },
-        yellow  = { "#d9a441", "#d6ad45" },
-        blue    = { "#468bd6", "#65b8e8" },
-        magenta = { "#b05cc7", "#c889e0" },
-        cyan    = { "#4db7a0", "#57c8b4" },
-        white   = { "#e06b8f", "#f4a7c3" },
-        orange  = { "#d67c37", "#de904e" },
-        pink    = { "#da605e", "#ed8d8d" },
-        bg = { "#fff0e3", "#fff0e3", "#f0e2d5", "#e0d3c8", "#c4b8ae" },
-        fg = { "#5c3424", "#6b3d2a", "#a65e41", "#d67a54" },
-        sel = { "#e8d4c6", "#f7dec7" },
+        black   = { "#0d0c0c", "#a4a7a4" },
+        red     = { "#d17f79", "#e46876" },
+        green   = { "#8a9a7b", "#87a987" },
+        yellow  = { "#b3a27a", "#caa86b" },
+        blue    = { "#8ba4b0", "#7fb4ca" },
+        magenta = { "#a292a3", "#938aa9" },
+        cyan    = { "#8ea4a2", "#7aa89f" },
+        white   = { "#bdb589", "#b8bcba" },
+        orange  = { "#c3917a", "#d98b71" },
+        pink    = { "#bb8f75", "#c18486" },
+        bg = { "#040608", "#090e13", "#101922", "#172532", "#24374b" },
+        fg = { "#d4d8d6", "#c5c9c7", "#8e918f", "#5f605f" },
+        sel = { "#262b2f", "#262b2f" },
         cur = { 
-            bg = "#c97b2e",
-            fg = "#6b3d2a",
+            bg = "#c5c9c7",
+            fg = "#090e13",
         },
-        comment = "#a68574",
-        status_line = "#fff0e3",
+        comment = "#7a7e7f",
+        status_line = "#040608",
         diff = {
-            add = "#bdc694",
-            delete = "#e9a288",
-            change = "#a3bedd",
-            text = "#dfb5d8",
+            add = "#4a5447",
+            delete = "#6d4746",
+            change = "#4a5962",
+            text = "#46434d",
         }
     }
     local spec = {
