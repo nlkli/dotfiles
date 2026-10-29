@@ -285,6 +285,7 @@ ts() {
 update() {
     brew upgrade -y && brew cleanup
     rustup update
+    pi update && pi update --extensions
 }
 
 clang-format-init() {

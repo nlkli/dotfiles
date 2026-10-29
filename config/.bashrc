@@ -40,9 +40,9 @@ fi
 
 set -o vi
 
-bind -m vi-insert '"\C-r"': reverse-search-history
-bind -m vi-insert '"\C-p"': history-search-backward
-bind -m vi-insert '"\C-n"': history-search-forward
+bind -m vi-insert '"\C-r": reverse-search-history'
+bind -m vi-insert '"\C-p": history-search-backward'
+bind -m vi-insert '"\C-n": history-search-forward'
 
 function imgview() {
     ffplay -loglevel quiet -noborder -infbuf -loop 0 "$@"
