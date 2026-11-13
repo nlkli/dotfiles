@@ -52,7 +52,7 @@ export LLAMA_MODELS_DIR=$HOME/.local/llama.cpp.models
 export LLAMA_SERVER_PORT=8888
 export LLAMA_BASE_URL=http://127.0.0.1:$LLAMA_SERVER_PORT
 export LLAMA_API_KEY=
-export LLAMA_CTX_SIZE=25000
+export LLAMA_CTX_SIZE=99999 #25000
 run-llama-server() {
     llama-server \
         --port $LLAMA_SERVER_PORT \
@@ -60,7 +60,7 @@ run-llama-server() {
         --no-models-autoload \
         --jinja \
         -ngl 999 \
-        # --ctx-size $LLAMA_CTX_SIZE \
+        --ctx-size $LLAMA_CTX_SIZE \
         --sleep-idle-seconds 4200
 }
 # mark/lable/block !alias
