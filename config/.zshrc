@@ -1,32 +1,58 @@
-export PATH="/opt/homebrew/bin:$HOME/.cargo/bin:$HOME/bin:$HOME/.local/bin:/usr/local/bin:$PATH"
-typeset -U PATH
-export TERM="xterm-256color"
-export EDITOR="nvim"
+[ -n "$ZSH_VERSION" ] && typeset -U PATH path
+addpath() {
+    local pos=pre
+    [ "$1" = "-a" ] && { pos=app; shift; }
+    [ -d "$1" ] || return 0
+    case ":$PATH:" in
+        *":$1:"*) return 0 ;;
+    esac
+    if [ "$pos" = pre ]; then PATH="$1:$PATH"; else PATH="$PATH:$1"; fi
+}
+# mark/lable/block !path
+export GOPATH="${GOPATH:-$HOME/go}"
+export CARGO_HOME="${CARGO_HOME:-$HOME/.cargo}"
+export RUSTUP_HOME="${RUSTUP_HOME:-$HOME/.rustup}"
+addpath /usr/local/go/bin
+addpath /home/linuxbrew/.linuxbrew/bin
+addpath /opt/homebrew/bin
+addpath /usr/local/bin
+addpath "$GOPATH/bin"
+addpath "$CARGO_HOME/bin"
+addpath "$HOME/bin"
+addpath "$HOME/.local/bin"
+export PATH
+if   command -v nvim >/dev/null 2>&1; then EDITOR=nvim
+elif command -v vim  >/dev/null 2>&1; then EDITOR=vim
+elif command -v vi  >/dev/null 2>&1; then EDITOR=vi
+else EDITOR=nano; fi
+export EDITOR
 export VISUAL="$EDITOR"
-export GIT_EDITOR="$EDITOR"
-export XDG_CONFIG_HOME="$HOME/.config"
-export LANG="en_US.UTF-8"
-export LC_ALL="en_US.UTF-8"
-export HOMEBREW_NO_ANALYTICS=1
-export LESS="-R -F -X"
+# export LANG="${LANG:-en_US.UTF-8}"
 export PAGER="less"
-export COLORTERM="truecolor"
-export MANPAGER="$EDITOR +Man!"
-export PRIVATE_GLOG_ENV_FILE="$HOME/.private_glob.env"
-if [ -f "$PRIVATE_GLOG_ENV_FILE" ]; then
+export LESS="-R -F -X -i -M"
+export MANPAGER="less"
+export XDG_CONFIG_HOME="${XDG_CONFIG_HOME:-$HOME/.config}"
+export XDG_DATA_HOME="${XDG_DATA_HOME:-$HOME/.local/share}"
+export XDG_STATE_HOME="${XDG_STATE_HOME:-$HOME/.local/state}"
+export XDG_CACHE_HOME="${XDG_CACHE_HOME:-$HOME/.cache}"
+if [ -t 0 ]; then
+    export GPG_TTY="$(tty)"
+fi
+export BAT_THEME="ansi" 
+export HOMEBREW_NO_ANALYTICS=1
+export PI_TELEMETRY=0
+export PENV="$HOME/.penv"
+if [ -f "$PENV" ]; then
     set -a
-    source "$PRIVATE_GLOG_ENV_FILE"
+    source "$PENV"
     set +a
 fi
-
-export PI_TELEMETRY=0
-
+# mark/lable/block !llama
 export LLAMA_MODELS_DIR=$HOME/.local/llama.cpp.models
 export LLAMA_SERVER_PORT=8888
 export LLAMA_BASE_URL=http://127.0.0.1:$LLAMA_SERVER_PORT
 export LLAMA_API_KEY=
 export LLAMA_CTX_SIZE=25000
-
 run-llama-server() {
     llama-server \
         --port $LLAMA_SERVER_PORT \
@@ -34,130 +60,230 @@ run-llama-server() {
         --no-models-autoload \
         --jinja \
         -ngl 999 \
-        --ctx-size $LLAMA_CTX_SIZE \
+        # --ctx-size $LLAMA_CTX_SIZE \
         --sleep-idle-seconds 4200
 }
-
-alias e="$EDITOR"
+# mark/lable/block !alias
+alias e="${EDITOR:-vim}"
 alias c="clear"
 alias q="exit"
-alias R="exec $SHELL"
-alias E="$EDITOR $HOME/.zshrc"
-alias ls="ls --color=auto"
+alias R='exec "$SHELL" -l'
+alias E='$EDITOR "$HOME/.$(basename "$SHELL")rc"'
+alias h="fc -l -20"
 alias ll="ls -lah"
-alias bat="bat --theme=ansi -p"
-if command -v python3.14 >/dev/null 2>&1; then
-    alias python="python3.14"
-fi
-
-HISTFILE="$HOME/.zsh_history"
-HISTSIZE=10000
-SAVEHIST=10000
-
-setopt SHARE_HISTORY
-setopt APPEND_HISTORY
-setopt INC_APPEND_HISTORY
-setopt HIST_IGNORE_DUPS
-setopt HIST_IGNORE_SPACE
-setopt HIST_EXPIRE_DUPS_FIRST
-setopt HIST_FIND_NO_DUPS
-setopt HIST_REDUCE_BLANKS
-setopt HIST_VERIFY
-setopt NOBEEP
-setopt NUMERIC_GLOB_SORT
-
-autoload -Uz compinit
-
-if [[ -n "$HOME/.zcompdump"(#qN.mh+24) ]]; then
-    compinit -C
+alias la="ls -A"
+alias ..="cd .."
+alias ...="cd ../.."
+alias ....="cd ../../.."
+alias -- -="cd -"    
+if ls --color=auto >/dev/null 2>&1; then
+    alias ls="ls --color=auto"
 else
-    compinit
+    alias ls="ls -G"
 fi
+if grep --color=auto -e '' /dev/null >/dev/null 2>&1; then
+    alias grep='grep --color=auto'
+fi
+if diff --color=auto /dev/null /dev/null >/dev/null 2>&1; then
+    alias diff='diff --color=auto'
+fi
+command -v batcat >/dev/null 2>&1 && ! command -v bat >/dev/null 2>&1 && alias bat="batcat"
+alias g="git"
+# mark/lable/block !options !hist
+HISTSIZE=100000
+HISTFILESIZE=100000   # bash
+SAVEHIST=100000       # zsh
+if [ -n "$ZSH_VERSION" ]; then
+    HISTFILE="$HOME/.zsh_history"
+    setopt SHARE_HISTORY
+    setopt EXTENDED_HISTORY
+    setopt INC_APPEND_HISTORY
+    setopt HIST_IGNORE_ALL_DUPS
+    setopt HIST_IGNORE_SPACE
+    setopt HIST_REDUCE_BLANKS
+    setopt HIST_SAVE_NO_DUPS
+    setopt HIST_FCNTL_LOCK
+    setopt HIST_VERIFY
+    setopt INTERACTIVE_COMMENTS
+    unsetopt FLOW_CONTROL
 
-autoload -Uz colors vcs_info add-zsh-hook
+    autoload -Uz compinit
+    if [[ -n "$HOME/.zcompdump"(#qN.mh+24) ]]; then
+        compinit -C
+    else
+        compinit
+    fi
 
-colors
+    unsetopt BEEP
 
-setopt PROMPT_SUBST
+    bindkey -v
+    KEYTIMEOUT=1
 
-zstyle ':vcs_info:*' enable git
-zstyle ':vcs_info:*' check-for-changes true
-zstyle ':vcs_info:git:*' stagedstr '+'
-zstyle ':vcs_info:git:*' unstagedstr '*'
-zstyle ':vcs_info:git:*' formats ':%F{yellow}%b%c%u%f'
+    bindkey -M viins "^R" history-incremental-search-backward
+    bindkey -M viins "^P" history-beginning-search-backward
+    bindkey -M viins "^N" history-beginning-search-forward
+    bindkey -M viins "^L" clear-screen
+    bindkey -M viins "^?" backward-delete-char
 
-update_prompt() {
-    vcs_info
-    local venv=""
-    [[ -n "$VIRTUAL_ENV" ]] && \
-        venv="%F{green}(${VIRTUAL_ENV:t})%f "
-    PROMPT="${venv}%F{green}%n@%m%f:%F{blue}%~%f${vcs_info_msg_0_}
-%(#.%F{red}.%F{cyan})>%f "
+    autoload -Uz edit-command-line
+    zle -N edit-command-line
+    bindkey -M vicmd "v" edit-command-line
+
+    setopt PROMPT_SUBST
+    autoload -Uz add-zsh-hook vcs_info
+    autoload -Uz colors
+    colors
+    zstyle ':vcs_info:*' enable git
+    zstyle ':vcs_info:*' check-for-changes true
+    zstyle ':vcs_info:git:*' stagedstr '+'
+    zstyle ':vcs_info:git:*' unstagedstr '*'
+    zstyle ':vcs_info:git:*' formats ':%F{yellow}%b%c%u%f'
+    zstyle ':vcs_info:git:*' actionformats ':%F{yellow}%b|%a%c%u%f'
+    update_prompt() {
+        vcs_info
+        local venv=""
+        if [[ -n "$VIRTUAL_ENV" ]]; then
+            venv="%F{magenta}(${VIRTUAL_ENV:t})%f "
+        fi
+        local user_host="%F{green}%n@%m%f"
+        local cwd="%F{blue}%~%f"
+        local git="${vcs_info_msg_0_}"
+        local symbol="%(#.%F{red}.%F{cyan})>%f"
+        PROMPT="${venv}${user_host}:${cwd}${git}"$'\n'"${symbol} "
+    }
+    add-zsh-hook precmd update_prompt
+elif [ -n "$BASH_VERSION" ]; then
+    HISTFILE="$HOME/.bash_history"
+    HISTCONTROL=ignoreboth:erasedups
+    HISTTIMEFORMAT='%F %T  '
+    HISTIGNORE='ls:ll:la:pwd:exit:clear:c'
+    shopt -s cmdhist
+    shopt -s lithist
+    shopt -s checkwinsize
+    shopt -s histappend
+    case ";$PROMPT_COMMAND;" in
+        *"history -a"*) ;;
+        *) PROMPT_COMMAND="history -a${PROMPT_COMMAND:+; $PROMPT_COMMAND}" ;;
+    esac
+    [ -t 0 ] && stty -ixon
+
+    if ! shopt -oq posix && [ -z "${BASH_COMPLETION_VERSINFO-}" ]; then
+        if   [ -f /usr/share/bash-completion/bash_completion ]; then
+            . /usr/share/bash-completion/bash_completion
+        elif [ -f /etc/bash_completion ]; then
+            . /etc/bash_completion
+        elif [ "${BASH_VERSINFO[0]}" -ge 4 ] && [ -f /opt/homebrew/etc/profile.d/bash_completion.sh ]; then
+            . /opt/homebrew/etc/profile.d/bash_completion.sh
+        elif [ "${BASH_VERSINFO[0]}" -ge 4 ] && [ -f /usr/local/etc/profile.d/bash_completion.sh ]; then
+            . /usr/local/etc/profile.d/bash_completion.sh
+        fi
+    fi
+
+    bind "set bell-style none"
+    bind "set completion-ignore-case on"
+    bind "set show-all-if-ambiguous on"
+
+    set -o vi
+    bind -m vi-insert '"\C-r": reverse-search-history'
+    bind -m vi-insert '"\C-p": history-search-backward'
+    bind -m vi-insert '"\C-n": history-search-forward'
+    bind -m vi-insert '"\C-l": clear-screen'
+
+    __prompt_reset='\[\e[0m\]'
+    __prompt_green='\[\e[32m\]'
+    __prompt_blue='\[\e[34m\]'
+    __prompt_yellow='\[\e[33m\]'
+    __prompt_red='\[\e[31m\]'
+    __prompt_cyan='\[\e[36m\]'
+    __prompt_magenta='\[\e[95m\]'
+    __git_prompt() {
+        local branch git_status line xy
+        local staged=0
+        local unstaged=0
+        git rev-parse --is-inside-work-tree >/dev/null 2>&1 || return 0
+        branch=$(git symbolic-ref --quiet --short HEAD 2>/dev/null) ||
+            branch="detached:$(git rev-parse --short HEAD 2>/dev/null)"
+        [[ -n "$branch" ]] || return 0
+        git_status=$(git status --porcelain=v1 --untracked-files=normal 2>/dev/null) ||
+            return 0
+        while IFS= read -r line; do
+            [[ ${#line} -lt 2 ]] && continue
+            xy="${line:0:2}"
+            if [[ "$xy" == '??' ]]; then
+                unstaged=1
+            else
+                [[ "${xy:0:1}" != ' ' ]] && staged=1
+                [[ "${xy:1:1}" != ' ' ]] && unstaged=1
+            fi
+            (( staged && unstaged )) && break
+        done <<< "$git_status"
+        printf ':%s%s%s%s%s' \
+            "$__prompt_yellow" \
+            "$branch" \
+            "$([[ $staged == 1 ]] && printf '+')" \
+            "$([[ $unstaged == 1 ]] && printf '*')" \
+            "$__prompt_reset"
+    }
+    __update_prompt() {
+        local venv=""
+        local git=""
+        local symbol
+        if [[ -n "${VIRTUAL_ENV:-}" ]]; then
+            local venv_name="${VIRTUAL_ENV%/}"
+            venv_name="${venv_name##*/}"
+
+            venv="${__prompt_magenta}(${venv_name})${__prompt_reset} "
+        fi
+        git=$(__git_prompt)
+        if (( EUID == 0 )); then
+            symbol="${__prompt_red}#${__prompt_reset}"
+        else
+            symbol="${__prompt_cyan}>${__prompt_reset}"
+        fi
+        PS1="${venv}${__prompt_green}\u@\h${__prompt_reset}:${__prompt_blue}\w${__prompt_reset}${git}"$'\n'"${symbol} "
+    }
+    if [[ ${__prompt_installed:-0} != 1 ]]; then
+        if [[ $(declare -p PROMPT_COMMAND 2>/dev/null) == "declare -a"* ]]; then
+            PROMPT_COMMAND+=(__update_prompt)
+        else
+            PROMPT_COMMAND="${PROMPT_COMMAND:+${PROMPT_COMMAND}; }__update_prompt"
+        fi
+        __prompt_installed=1
+    fi
+fi
+export HISTFILE HISTSIZE
+# mark/lable/block !functions
+mkcd() {
+    mkdir -p -- "$1" && cd -- "$1"
 }
-
-add-zsh-hook precmd update_prompt
-
-bindkey -v
-
-KEYTIMEOUT=1
-
-bindkey '^r' history-incremental-search-backward
-bindkey '^y' copy-prompt-line-to-clipboard
-
-bindkey -M viins '^?' backward-delete-char
-
-if command -v pbcopy >/dev/null 2>&1; then
-    alias clipcopy="pbcopy"
-    alias clippaste="pbpaste"
-elif command -v wl-copy >/dev/null 2>&1; then
-    alias clipcopy="wl-copy"
-    alias clippaste="wl-paste"
-elif command -v xclip >/dev/null 2>&1; then
-    alias clipcopy="xclip -selection clipboard"
-    alias clippaste="xclip -selection clipboard -o"
-elif command -v xsel >/dev/null 2>&1; then
-    alias clipcopy="xsel --clipboard --input"
-    alias clippaste="xsel --clipboard --output"
-elif command -v clip.exe >/dev/null 2>&1; then
-    alias clipcopy="clip.exe"
-    alias clippaste="powershell.exe -command Get-Clipboard"
-fi
-
-if command -v clipcopy >/dev/null 2>&1; then
-    function vi-yank-clipboard() {
-        zle vi-yank
-        print -rn -- "$CUTBUFFER" | clipcopy
+duh() {
+    du -sh ./* ./.??* 2>/dev/null | sort -h
+}
+extract() {
+    [ "$#" -eq 1 ] && [ -f "$1" ] || {
+        echo "Usage: extract <archive>" >&2
+        return 1
     }
-
-    function vi-put-clipboard-after() {
-        CUTBUFFER="$(clippaste)"
-        zle vi-put-after
-    }
-
-    function vi-put-clipboard-before() {
-        CUTBUFFER="$(clippaste)"
-        zle vi-put-before
-    }
-
-    function copy-prompt-line-to-clipboard() {
-        local line="${LBUFFER}${RBUFFER}"
-        print -rn -- "$line" | clipcopy
-    }
-
-    zle -N vi-yank-clipboard
-    zle -N vi-put-clipboard-after
-    zle -N vi-put-clipboard-before
-    zle -N copy-prompt-line-to-clipboard
-
-    bindkey -M vicmd '^y' vi-yank-clipboard
-    bindkey -M vicmd '^p' vi-put-clipboard-after
-    bindkey -M vicmd '^P' vi-put-clipboard-before
-fi
-
+    case "$1" in
+        *.tar.bz2|*.tbz2) tar xjf "$1" ;;
+        *.tar.gz|*.tgz)   tar xzf "$1" ;;
+        *.tar.xz|*.txz)   tar xJf "$1" ;;
+        *.tar.zst|*.tzst) tar --zstd -xf "$1" ;;
+        *.tar)            tar xf "$1" ;;
+        *.zip)            unzip "$1" ;;
+        *.7z)             7z x "$1" ;;
+        *.rar)            unrar x "$1" ;;
+        *.gz)             gunzip "$1" ;;
+        *.bz2)            bunzip2 "$1" ;;
+        *.xz)             unxz "$1" ;;
+        *.zst)            zstd -d "$1" ;;
+        *.lz4)            lz4 -d "$1" ;;
+        *) echo "Unknown archive format: $1" >&2; return 1 ;;
+    esac
+}
 imgview() {
     ffplay -loglevel quiet -noborder -infbuf -loop 0 "$@"
 }
-
 y() {
     local tmp="$(mktemp -t "yazi-cwd.XXXXXX")"
     local cwd
@@ -168,7 +294,6 @@ y() {
     fi
     command rm -f -- "$tmp"
 }
-
 myip() {
     local out
     local curl_args=(
@@ -202,7 +327,6 @@ myip() {
     echo "Error: failed to retrieve IP information from all sources." >&2
     return 1
 }
-
 sysinfo() {
     local json
     json=$(fastfetch -j)
@@ -217,41 +341,32 @@ sysinfo() {
     ')
 
     printf "%s\n%s\n" "$info" "$(uptime)"
-    # myip | awk '{printf "%s%s", sep, $0; sep="; "} END {printf "\n"}'
 }
-
 rpass() {
     local num="${1:-1}"
     local len="${2:-32}"
-
     local curl_args=(
         curl
         -fsSL
         --max-time 5
         --retry 2
     )
-
     "${curl_args[@]}" \
         "https://www.random.org/passwords/?num=${num}&len=${len}&format=plain&rnd=new"
 }
-
 ts() {
     if [[ "$1" == "main" ]]; then
         tmux new -A -s main
         return 0
     fi
-
     local project_dir="${1:-$PWD}"
     local session_name pane_left
-
     project_dir=$(realpath "$project_dir" 2>/dev/null)
     if [[ -z "$project_dir" || ! -d "$project_dir" ]]; then
         echo "devts: not a directory '$1'" >&2
         return 1
     fi
-
     session_name=$(basename "$project_dir" | tr '.: ' '_')
-
     if tmux has-session -t "$session_name" 2>/dev/null; then
         if [[ -n "$TMUX" ]]; then
             tmux switch-client -t "$session_name"
@@ -260,34 +375,43 @@ ts() {
         fi
         return
     fi
-
     tmux new-session -d -s "$session_name" -n editor -c "$project_dir"
-
-    # capture original pane id before split (this is the left pane)
     pane_left=$(tmux display-message -p -t "${session_name}:editor" '#{pane_id}')
-
     tmux send-keys -t "$pane_left" "$EDITOR ." C-m
     tmux split-window -h -t "${session_name}:editor" -p 37 -c "$project_dir"
     tmux send-keys -t "${session_name}:editor" "ls -lah" C-m
-
     tmux new-window -t "$session_name" -n shell -c "$project_dir"
-
     tmux select-window -t "${session_name}:editor"
     tmux select-pane -t "$pane_left"
-
     if [[ -n "$TMUX" ]]; then
         tmux switch-client -t "$session_name"
     else
         tmux attach -t "$session_name"
     fi
 }
-
 update() {
-    brew upgrade -y && brew cleanup
-    rustup update
-    pi update && pi update --extensions
+    local failed=0
+    if command -v brew >/dev/null 2>&1; then
+        brew upgrade && brew cleanup || failed=1
+    fi
+    if [ -f /etc/debian_version ] && command -v apt-get >/dev/null 2>&1; then
+        if [ "$(id -u)" -eq 0 ]; then
+            apt-get update && apt-get upgrade -y || failed=1
+        elif command -v sudo >/dev/null 2>&1; then
+            sudo apt-get update && sudo apt-get upgrade -y || failed=1
+        else
+            echo "update: sudo not found" >&2
+            failed=1
+        fi
+    fi
+    if command -v rustup >/dev/null 2>&1; then
+        rustup update || failed=1
+    fi
+    if command -v pi >/dev/null 2>&1; then
+        pi update && pi update --extensions || failed=1
+    fi
+    return "$failed"
 }
-
 clang-format-init() {
   local target="${1:-.clang-format}"
 
@@ -337,8 +461,55 @@ AlignConsecutiveDeclarations: false
 AlignTrailingComments: false
 EOF
 }
-
-export LS_COLORS="di=01;34:ln=01;36:mh=00:pi=40;33:so=01;35:do=01;35:bd=40;33;01:cd=40;33;01:or=40;31;01:mi=00:ex=01;32:*.tar=01;31:*.tgz=01;31:*.gz=01;31:*.bz2=01;31:*.xz=01;31:*.zst=01;31:*.zip=01;31:*.rar=01;31:*.7z=01;31:*.iso=01;31:*.jpg=01;35:*.jpeg=01;35:*.png=01;35:*.gif=01;35:*.webp=01;35:*.svg=01;35:*.ico=01;35:*.mp3=00;36:*.flac=00;36:*.wav=00;36:*.m4a=00;36:*.mp4=00;36:*.mkv=00;36:*.webm=00;36:*.pdf=01;33:*.doc=01;33:*.docx=01;33:*.odt=01;33:*.xls=01;33:*.xlsx=01;33:*.ppt=01;33:*.pptx=01;33:*.md=01;33:*.txt=01;33:*.c=01;32:*.h=01;32:*.cpp=01;32:*.hpp=01;32:*.rs=01;32:*.go=01;32:*.py=01;32:*.js=01;32:*.ts=01;32:*.java=01;32:*.kt=01;32:*.sh=01;32:*.zsh=01;32:*.html=01;32:*.css=01;32:*.conf=00;33:*.cfg=00;33:*.ini=00;33:*.toml=00;33:*.yaml=00;33:*.yml=00;33:*.json=00;33:*.xml=00;33:*.sql=00;36:*.db=00;36:*.sqlite=00;36:*.tmp=00;90:*.temp=00;90:*.bak=00;90:*.old=00;90:*.log=00;90"
-
-sysinfo
-eval "$(recol --completions)"
+# mark/lable/block !lscolor
+LS_COLORS="rs=0:no=00:fi=00"
+LS_COLORS+=":di=01;34"
+LS_COLORS+=":ln=01;36"
+LS_COLORS+=":or=01;31;40"
+LS_COLORS+=":mi=01;31;40"
+LS_COLORS+=":ex=01;32"
+LS_COLORS+=":pi=33:so=01;35:do=01;35"
+LS_COLORS+=":bd=33;01:cd=33;01"
+LS_COLORS+=":su=01;37;41:sg=01;30;43:ca=00"
+LS_COLORS+=":tw=30;42:ow=01;34;04:st=37;44"
+for e in tar tgz tbz tbz2 txz gz bz2 xz zst lz4 lzma zip rar 7z iso img dmg \
+         deb rpm pkg apk jar war whl cab; do
+    LS_COLORS+=":*.$e=01;31"
+done
+for e in jpg jpeg png gif webp svg ico bmp tif tiff avif heic psd ai; do
+    LS_COLORS+=":*.$e=01;35"
+done
+for e in mp3 flac wav m4a ogg opus aac mp4 mkv webm mov avi flv wmv; do
+    LS_COLORS+=":*.$e=00;36"
+done
+for e in pdf doc docx odt rtf epub xls xlsx ods ppt pptx odp md rst adoc tex txt; do
+    LS_COLORS+=":*.$e=01;33"
+done
+LS_COLORS+=":*README=01;33:*LICENSE=01;33:*CHANGELOG=01;33"
+for e in c h cpp hpp cc cs java kt scala swift go rs py rb php lua ex exs \
+         js jsx ts tsx vue svelte html css scss less \
+         sh bash zsh fish ps1 bat vim nix; do
+    LS_COLORS+=":*.$e=01;32"
+done
+LS_COLORS+=":*Makefile=01;32:*Dockerfile=01;32:*Justfile=01;32"
+for e in conf cfg ini toml yaml yml json jsonc xml env properties; do
+    LS_COLORS+=":*.$e=00;33"
+done
+for e in csv tsv jsonl sql db sqlite sqlite3 ipynb parquet; do
+    LS_COLORS+=":*.$e=00;36"
+done
+for e in pem key crt cer gpg asc pub; do
+    LS_COLORS+=":*.$e=00;31"
+done
+for e in tmp temp bak old orig swp swo log lock map o a so class pyc pyo; do
+    LS_COLORS+=":*.$e=90"
+done
+LS_COLORS+=":*~=90:*.min.js=90:*.min.css=90:*.gitignore=90:*.DS_Store=90"
+unset e
+export LS_COLORS
+if [ -n "$ZSH_VERSION" ]; then
+    zstyle ":completion:*" list-colors "${(s.:.)LS_COLORS}"
+elif [ -n "$BASH_VERSION" ]; then
+    bind "set colored-stats on"
+    bind "set colored-completion-prefix on"
+fi
