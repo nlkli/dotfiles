@@ -208,26 +208,26 @@ function! s:RecolApply() abort
     endif
 
     let P = {}
-    let P.black   = ["", "#475157", "#394146"]
-    let P.red     = ["", "#ea9166", "#ed9e78"]
-    let P.green   = ["", "#8bc49c", "#99cba8"]
-    let P.yellow  = ["", "#e9c366", "#ecca78"]
-    let P.blue    = ["", "#78b9e8", "#88c1eb"]
-    let P.magenta = ["", "#c79cda", "#cea8de"]
-    let P.cyan    = ["", "#74d5d6", "#85dadb"]
-    let P.white   = ["", "#e6d8b9", "#e9ddc6"]
-    let P.orange  = ["", "#eaaa66", "#edb478"]
-    let P.pink    = ["", "#d8a07a", "#ddaa8b"]
-    let P.bg      = ["", "#0d2431", "#102c3c", "#14374b", "#19435c", "#215b7c"]
-    let P.fg      = ["", "#fff0d0", "#f8e9ca", "#c0b49c", "#8f8775"]
-    let P.sel     = ["", "#344952", "#324445"]
-    let P.cur     = ["", "#ecca78", "#102c3c"]
-    let P.comment = "#9b9d91"
+    let P.black   = ["", "#292722", "#827b6d"]
+    let P.red     = ["", "#ef7d69", "#ffb39d"]
+    let P.green   = ["", "#89b67c", "#b8e3a5"]
+    let P.yellow  = ["", "#d6aa4a", "#ffd36b"]
+    let P.blue    = ["", "#82a8c8", "#b4d7f2"]
+    let P.magenta = ["", "#b49ac7", "#e3c4f3"]
+    let P.cyan    = ["", "#78b8b0", "#a6e7de"]
+    let P.white   = ["", "#ccc2ad", "#f5ebd5"]
+    let P.orange  = ["", "#e3955b", "#ffc387"]
+    let P.pink    = ["", "#d5907a", "#eebfa8"]
+    let P.bg      = ["", "#050504", "#10100f", "#1f1f1d", "#30302d", "#50504b"]
+    let P.fg      = ["", "#fff4db", "#f0e6ce", "#b8b09e", "#878274"]
+    let P.sel     = ["", "#33312d", "#312a19"]
+    let P.cur     = ["", "#e6b74e", "#10100f"]
+    let P.comment = "#969082"
     let P.diff = {}
-    let P.diff["add"]    = "#4e786c"
-    let P.diff["del"]    = "#7d5f51"
-    let P.diff["change"] = "#447392"
-    let P.diff["txt"]    = "#59597b"
+    let P.diff["add"]    = "#4d6346"
+    let P.diff["del"]    = "#80473c"
+    let P.diff["change"] = "#495c6c"
+    let P.diff["txt"]    = "#524759"
 
     call s:RecolHi("Normal",       P.fg[2], P.bg[2])
     call s:RecolHi("Terminal",     P.fg[2], P.bg[2])
@@ -423,7 +423,7 @@ function! s:RecolApply() abort
     highlight! link LspInformationText       DiagnosticInfo
     highlight! link LspHintText              DiagnosticHint
 
-    let g:colors_name = "Pharaoh's Voltage"
+    let g:colors_name = "This One Goes to 11"
 endfunction
 call s:RecolApply()
 " recol:end

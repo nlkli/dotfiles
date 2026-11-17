@@ -127,7 +127,7 @@ if [ -n "$ZSH_VERSION" ]; then
 
     autoload -Uz edit-command-line
     zle -N edit-command-line
-    bindkey -M vicmd "v" edit-command-line
+    bindkey -M vicmd "z" edit-command-line
 
     setopt PROMPT_SUBST
     autoload -Uz add-zsh-hook vcs_info
@@ -188,68 +188,6 @@ elif [ -n "$BASH_VERSION" ]; then
     bind -m vi-insert '"\C-p": history-search-backward'
     bind -m vi-insert '"\C-n": history-search-forward'
     bind -m vi-insert '"\C-l": clear-screen'
-
-    __prompt_reset='\[\e[0m\]'
-    __prompt_green='\[\e[32m\]'
-    __prompt_blue='\[\e[34m\]'
-    __prompt_yellow='\[\e[33m\]'
-    __prompt_red='\[\e[31m\]'
-    __prompt_cyan='\[\e[36m\]'
-    __prompt_magenta='\[\e[95m\]'
-    __git_prompt() {
-        local branch git_status line xy
-        local staged=0
-        local unstaged=0
-        git rev-parse --is-inside-work-tree >/dev/null 2>&1 || return 0
-        branch=$(git symbolic-ref --quiet --short HEAD 2>/dev/null) ||
-            branch="detached:$(git rev-parse --short HEAD 2>/dev/null)"
-        [[ -n "$branch" ]] || return 0
-        git_status=$(git status --porcelain=v1 --untracked-files=normal 2>/dev/null) ||
-            return 0
-        while IFS= read -r line; do
-            [[ ${#line} -lt 2 ]] && continue
-            xy="${line:0:2}"
-            if [[ "$xy" == '??' ]]; then
-                unstaged=1
-            else
-                [[ "${xy:0:1}" != ' ' ]] && staged=1
-                [[ "${xy:1:1}" != ' ' ]] && unstaged=1
-            fi
-            (( staged && unstaged )) && break
-        done <<< "$git_status"
-        printf ':%s%s%s%s%s' \
-            "$__prompt_yellow" \
-            "$branch" \
-            "$([[ $staged == 1 ]] && printf '+')" \
-            "$([[ $unstaged == 1 ]] && printf '*')" \
-            "$__prompt_reset"
-    }
-    __update_prompt() {
-        local venv=""
-        local git=""
-        local symbol
-        if [[ -n "${VIRTUAL_ENV:-}" ]]; then
-            local venv_name="${VIRTUAL_ENV%/}"
-            venv_name="${venv_name##*/}"
-
-            venv="${__prompt_magenta}(${venv_name})${__prompt_reset} "
-        fi
-        git=$(__git_prompt)
-        if (( EUID == 0 )); then
-            symbol="${__prompt_red}#${__prompt_reset}"
-        else
-            symbol="${__prompt_cyan}>${__prompt_reset}"
-        fi
-        PS1="${venv}${__prompt_green}\u@\h${__prompt_reset}:${__prompt_blue}\w${__prompt_reset}${git}"$'\n'"${symbol} "
-    }
-    if [[ ${__prompt_installed:-0} != 1 ]]; then
-        if [[ $(declare -p PROMPT_COMMAND 2>/dev/null) == "declare -a"* ]]; then
-            PROMPT_COMMAND+=(__update_prompt)
-        else
-            PROMPT_COMMAND="${PROMPT_COMMAND:+${PROMPT_COMMAND}; }__update_prompt"
-        fi
-        __prompt_installed=1
-    fi
 fi
 export HISTFILE HISTSIZE
 # mark/lable/block !functions
